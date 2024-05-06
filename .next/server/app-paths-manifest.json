@@ -1,6 +1,0 @@
-{
-  "/registration/page": "app/registration/page.js",
-  "/parent-dashboard/page": "app/parent-dashboard/page.js",
-  "/verification/page": "app/verification/page.js",
-  "/login/page": "app/login/page.js"
-}

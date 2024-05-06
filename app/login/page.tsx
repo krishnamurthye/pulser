@@ -2,6 +2,7 @@
 import { useRouter } from "next/navigation";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import { ROLE_MAPPING } from "../utils/constants";
 
 const LoginSchema = Yup.object().shape({
   email: Yup.string().email("Invalid email").required("Email is required"),
@@ -10,33 +11,6 @@ const LoginSchema = Yup.object().shape({
 
 const Login = () => {
   const router = useRouter();
-
-  // const handleSubmit = async (values: any, actions: any) => {
-  //   const { email, password } = values;
-
-  //   try {
-  //     const response = await fetch("http://localhost:4201/login", {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({ username: email, password }), // Ensure this matches your backend expectations
-  //     });
-
-  //     const data = await response.json();
-  //     if (response.ok) {
-  //       console.log("Login successful:", data);
-  //       router.push("/parent-dashboard"); // Redirect on successful login
-  //     } else {
-  //       console.error("Login failed:", data.message);
-  //       alert(data.message); // Show error message
-  //     }
-  //   } catch (error) {
-  //     console.error("Network error:", error);
-  //     alert("Failed to connect to the server");
-  //   }
-  //   actions.setSubmitting(false);
-  // };
 
   const handleSubmit = async (values: any, actions: any) => {
     const { email, password } = values;
@@ -55,8 +29,20 @@ const Login = () => {
 
         // Store the token in localStorage
         localStorage.setItem("authToken", data.token);
-
-        router.push("/parent-dashboard");
+        localStorage.setItem("authToken", data?.user?.role);
+        switch (data?.user?.role) {
+          case ROLE_MAPPING.PARENT:
+            router.push("/parent-dashboard");
+            break;
+          case ROLE_MAPPING.COUNCILLOR:
+            router.push("/parent-dashboard");
+            break;
+          case ROLE_MAPPING.LSA:
+            router.push("/lsa-dashboard");
+            break;
+          default:
+            router.push("/parent-dashboard");
+        }
       } else {
         console.error("Login failed:", data.message);
         alert(data.message);

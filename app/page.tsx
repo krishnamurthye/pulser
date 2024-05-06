@@ -1,6 +1,5 @@
 import React from "react";
 import Link from "next/link";
-import { ApolloProvider } from "@apollo/client";
 
 export default function Home() {
   return (
