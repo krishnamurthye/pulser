@@ -23,9 +23,29 @@ const ChildEditPopup = ({ onClose }: any) => {
     }));
   };
 
-  const handleSave = () => {
-    // Handle saving the form data
+  const handleSave = async () => {
+    // Assuming formData is an object with the properties you need to send
     console.log(formData);
+
+    try {
+      const response = await fetch("http://localhost:4201/api/children", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        console.log("Success:", result);
+        // Handle any follow-up tasks
+      } else {
+        throw new Error("Failed to save child data");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
 
   return (
