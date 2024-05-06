@@ -7,6 +7,8 @@ const jwt = require("jsonwebtoken");
 const {
   LOGIN_SELECT_ALL_USERS,
   REGISTRATION_ADD_USER,
+  PARENT_ADD_CHILD,
+  PARENT_GET_ALL_CHILDREN,
 } = require("./sql/queries");
 const saltRounds = 10;
 
@@ -64,32 +66,6 @@ app.post("/register", (req, res) => {
   });
 });
 
-// app.post("/login", (req, res) => {
-//   const { username, password } = req.body;
-//   const query = "SELECT * FROM users WHERE username = ?";
-
-//   pool.execute(query, [username], (error, results) => {
-//     if (error) {
-//       console.error("Failed to retrieve user: ", error);
-//       return res.status(500).json({ error: "Internal server error" });
-//     }
-//     if (results.length > 0) {
-//       bcrypt.compare(password, results[0].password, function (err, result) {
-//         if (result) {
-//           // Passwords match
-//           res.status(200).json({ message: "Login successful" });
-//         } else {
-//           // Passwords do not match
-//           res.status(401).json({ message: "Login failed, incorrect password" });
-//         }
-//       });
-//     } else {
-//       // User not found
-//       res.status(401).json({ message: "Login failed, user not found" });
-//     }
-//   });
-// });
-
 app.post("/login", (req, res) => {
   const { username, password } = req.body;
 
@@ -133,10 +109,81 @@ app.post("/login", (req, res) => {
   });
 });
 
-// Error handling middleware
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).send("Something broke!");
+// POST endpoint to add a child
+app.post("/api/children", (req, res) => {
+  const {
+    firstname,
+    lastname,
+    dob,
+    school,
+    grade,
+    needLevel,
+    age,
+    additionalInformation,
+    userId,
+  } = req.body;
+  const query = PARENT_ADD_CHILD;
+
+  pool.execute(
+    query,
+    [
+      firstname,
+      lastname,
+      dob,
+      school,
+      grade,
+      needLevel,
+      age,
+      additionalInformation,
+      userId,
+    ],
+    (error, results) => {
+      if (error) {
+        console.error("Failed to insert into children:", error);
+        return res.status(500).json({ error: "Internal Server Error" });
+      }
+      res.status(201).json({
+        message: "Child added successfully",
+        childId: results.insertId,
+      });
+    }
+  );
+});
+
+// // Error handling middleware
+// app.use((err, req, res, next) => {
+//   console.error(err.stack);
+//   res.status(500).send("Something broke!");
+// });
+
+// Middleware to authenticate and set req.user
+app.use((req, res, next) => {
+  const token = req.headers.authorization?.split(" ")[1]; // Assuming token is sent as "Bearer <token>"
+  if (token) {
+    jwt.verify(token, secretKey, (err, decoded) => {
+      if (err) {
+        return res.status(401).json({ error: "Failed to authenticate token." });
+      }
+      req.user = decoded; // Add the decoded token to the request so it can be used in subsequent handlers
+      next();
+    });
+  } else {
+    res.status(401).json({ error: "No token provided." });
+  }
+});
+
+// GET endpoint to fetch all children for the logged-in user
+app.get("/api/children", (req, res) => {
+  const userId = req.user.id; // Assuming the decoded token contains 'id' of the user
+  const query = PARENT_GET_ALL_CHILDREN;
+
+  pool.execute(query, [userId], (error, results) => {
+    if (error) {
+      console.error("Failed to retrieve children:", error);
+      return res.status(500).json({ error: "Internal Server Error" });
+    }
+    res.status(200).json(results);
+  });
 });
 
 // Start the server
