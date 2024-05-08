@@ -11,6 +11,7 @@ const Children = ({ gradeList, needLevelList, schoolsList }: any) => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isChildPopupOpen, setIsChildPopupOpen] = useState(false);
   const router = useRouter();
+  const router = useRouter();
 
   const data = {
     children: [
