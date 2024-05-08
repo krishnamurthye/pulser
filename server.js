@@ -4,6 +4,10 @@ const mysql = require("mysql2");
 const cors = require("cors");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const gradeList = require("./config/grades-list.json");
+const needLevelList = require("./config/need-levels-list.json");
+const schoolsList = require("./config/schools-list.json");
+
 const {
   LOGIN_SELECT_ALL_USERS,
   REGISTRATION_ADD_USER,
@@ -110,30 +114,35 @@ app.post("/login", (req, res) => {
 // POST endpoint to add a child
 app.post("/api/children/add", (req, res) => {
   const {
-    firstname,
-    lastname,
+    firstName,
+    lastName,
     dob,
     school,
     grade,
     needLevel,
     age,
-    additionalInformation,
-    userId,
+    additionalInfo,
+    isActive,
+    username,
   } = req.body;
-  const query = PARENT_ADD_CHILD;
+
+  function sanitizeInput(value) {
+    return value === undefined ? null : value;
+  }
 
   pool.execute(
-    query,
+    PARENT_ADD_CHILD,
     [
-      firstname,
-      lastname,
-      dob,
-      school,
-      grade,
-      needLevel,
-      age,
-      additionalInformation,
-      userId,
+      sanitizeInput(firstName),
+      sanitizeInput(lastName),
+      sanitizeInput(dob),
+      sanitizeInput(age),
+      sanitizeInput(school),
+      sanitizeInput(grade),
+      sanitizeInput(needLevel),
+      sanitizeInput(additionalInfo),
+      sanitizeInput(username),
+      sanitizeInput(isActive),
     ],
     (error, results) => {
       if (error) {
@@ -162,6 +171,13 @@ app.get("/api/children/:username", (req, res) => {
     }
     res.status(200).json(results);
   });
+});
+
+app.get("/api/children/uiparams/:username", (req, res) => {
+  const { username } = req.params; // Extract username from path parameters
+  // Assuming JWT middleware sets `req.user`
+
+  res.status(200).json({ gradeList, needLevelList, schoolsList });
 });
 
 // Middleware to authenticate and set req.user
