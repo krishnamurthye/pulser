@@ -29,7 +29,8 @@ const Login = () => {
 
         // Store the token in localStorage
         localStorage.setItem("authToken", data.token);
-        localStorage.setItem("authToken", data?.user?.role);
+        localStorage.setItem("role", data?.user?.role);
+        localStorage.setItem("username", data?.user?.username);
         switch (data?.user?.role) {
           case ROLE_MAPPING.PARENT:
             router.push("/parent-dashboard");

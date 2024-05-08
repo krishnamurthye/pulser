@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ChildEditPopup from "./child-new-popup";
 import ChildContactCard from "./child-contact-card";
 import ChildTable from "./child-table";
@@ -9,16 +9,53 @@ import Children from "./children/page";
 import LSARRequestsPage from "./LSA-requests/page";
 import Billing from "./billing/page";
 import Messages from "./messages/page";
-import { useQuery, gql } from "@apollo/client";
 
 const Dashboard = () => {
   const [activeNavItem, setActiveNavItem] = useState("Children");
   const [searchQuery, setSearchQuery] = useState("");
+  const [gradeList, setGradeList] = useState([]);
+  const [needLevelList, setNeedLevelList] = useState([]);
+  const [schoolsList, setSchoolsList] = useState([]);
 
   const router = useRouter();
   const handleNavItemClick = (item: any) => {
     setActiveNavItem(item);
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const username: any = localStorage.getItem("username");
+        const token: any = localStorage.getItem("authToken");
+        const encodedUsername = encodeURIComponent(username);
+        const response = await fetch(
+          `http://localhost:4201/api/children/uiparams/${encodedUsername}`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (response.ok) {
+          const result = await response.json();
+          console.log("Success:", result);
+          setGradeList(result.gradeList);
+          setNeedLevelList(result.needLevelList);
+          setSchoolsList(result.schoolsList);
+          // Handle any follow-up tasks
+        } else {
+          throw new Error("Failed to fetch child data");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <div className="sm:px-6 lg:px-8 container mx-auto mt-10">
@@ -74,7 +111,13 @@ const Dashboard = () => {
         </div>
         {/* Main Content */}
         <div className="w-3/4 pl-4">
-          {activeNavItem === "Children" && <Children />}
+          {activeNavItem === "Children" && (
+            <Children
+              gradeList={gradeList}
+              needLevelList={needLevelList}
+              schoolsList={schoolsList}
+            />
+          )}
           {activeNavItem === "LSA Requests" && <LSARRequestsPage />}
           {activeNavItem === "Billing" && <Billing />}
           {activeNavItem === "Messages" && <Messages />}

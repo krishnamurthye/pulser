@@ -2,7 +2,12 @@
 import { useState } from "react";
 import PersonIcon from "../../public/PersonIcon";
 
-const ChildEditPopup = ({ onClose }: any) => {
+const ChildEditPopup = ({
+  onClose,
+  gradeList,
+  needLevelList,
+  schoolsList,
+}: any) => {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -13,6 +18,7 @@ const ChildEditPopup = ({ onClose }: any) => {
     needLevel: "",
     additionalInfo: "",
     isActive: false,
+    username: localStorage.getItem("username"),
   });
 
   const handleChange = (e: any) => {
@@ -28,7 +34,7 @@ const ChildEditPopup = ({ onClose }: any) => {
     console.log(formData);
 
     try {
-      const response = await fetch("http://localhost:4201/api/children", {
+      const response = await fetch("http://localhost:4201/api/children/add", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -121,8 +127,11 @@ const ChildEditPopup = ({ onClose }: any) => {
                 onChange={handleChange}
                 className="w-full px-3 py-2 border rounded-md"
               >
-                <option value="">Select School</option>
-                {/* Add school options */}
+                {schoolsList.map((school: any) => (
+                  <option key={school.id} value={school.id}>
+                    {school.name}
+                  </option>
+                ))}
               </select>
             </div>
             <div className="mb-4">
@@ -137,7 +146,11 @@ const ChildEditPopup = ({ onClose }: any) => {
                 className="w-full px-3 py-2 border rounded-md"
               >
                 <option value="">Select Grade</option>
-                {/* Add grade options */}
+                {gradeList.map((grade: any) => (
+                  <option key={grade.id} value={grade.id}>
+                    {grade.name}
+                  </option>
+                ))}
               </select>
             </div>
             <div className="mb-4">
@@ -152,7 +165,11 @@ const ChildEditPopup = ({ onClose }: any) => {
                 className="w-full px-3 py-2 border rounded-md"
               >
                 <option value="">Select Need Level</option>
-                {/* Add need level options */}
+                {needLevelList.map((needLevel: any) => (
+                  <option key={needLevel.id} value={needLevel.id}>
+                    {needLevel.name}
+                  </option>
+                ))}
               </select>
             </div>
             <div className="mb-4">
