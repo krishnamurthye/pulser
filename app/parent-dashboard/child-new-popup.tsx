@@ -28,7 +28,7 @@ const ChildEditPopup = ({ onClose }: any) => {
     console.log(formData);
 
     try {
-      const response = await fetch("http://localhost:4201/api/children", {
+      const response = await fetch("http://localhost:4201/api/children/add", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -3,11 +3,14 @@ import PersonIcon from "@/public/PersonIcon";
 import ChildEditPopup from "../child-new-popup";
 import ChildContactCard from "../child-contact-card";
 import ChildTable from "../child-table";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 const Children = () => {
+  const [children, setChildren] = useState([]);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isChildPopupOpen, setIsChildPopupOpen] = useState(false);
+  const router = useRouter();
 
   const data = {
     children: [
@@ -23,6 +26,48 @@ const Children = () => {
       },
     ],
   };
+
+  const token = localStorage.getItem("authToken");
+  const username: any = localStorage.getItem("username");
+
+  useEffect(() => {
+    const fetchChildren = async () => {
+      let response: any;
+      try {
+        if (!token) {
+          router.push("/login"); // Redirect to login if no token
+          return;
+        }
+
+        const encodedUsername = encodeURIComponent(username);
+        const response = await fetch(
+          `http://localhost:4201/api/children/${encodedUsername}`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch");
+        }
+
+        const data = await response.json();
+        setChildren(data); // Assuming the API returns the array of children directly
+      } catch (error: any) {
+        console.error("Failed to fetch children:", error);
+        if (error.message === "Failed to fetch" || response.status === 401) {
+          // Unauthorized access or network error
+          router.push("/login");
+        }
+      }
+    };
+
+    fetchChildren();
+  }, [router, username]);
 
   const handleChildClick = () => {
     setIsChildPopupOpen(true);
@@ -59,7 +104,7 @@ const Children = () => {
         />
       </div>
       <div className="grid grid-cols-3 gap-4">
-        {data.children.map((child) => (
+        {children.map((child: any) => (
           <div
             key={child.id}
             className="bg-gray-200 p-4 rounded-md cursor-pointer text-center"
