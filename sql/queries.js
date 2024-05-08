@@ -6,7 +6,7 @@ const PARENT_ADD_CHILD = `
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
     `;
 
-const PARENT_GET_ALL_CHILDREN = "SELECT * FROM children WHERE userId = ?";
+const PARENT_GET_ALL_CHILDREN = "SELECT * FROM children WHERE username = ?";
 
 module.exports = {
   LOGIN_SELECT_ALL_USERS,

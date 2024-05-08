@@ -42,10 +42,6 @@ app.post("/register", (req, res) => {
   const { username, email, password, phoneNumber, role } = req.body;
 
   bcrypt.hash(password, saltRounds, function (err, hash) {
-    const query =
-      "INSERT INTO users (username, email, password, phoneNumber, role) VALUES (?, ?, ?, ?, ?)";
-
-    console.log("registration sql query =====> ", REGISTRATION_ADD_USER);
     if (err) {
       return res.status(500).json({ error: "Error hashing password" });
     }
@@ -54,8 +50,10 @@ app.post("/register", (req, res) => {
       [username, email, hash, phoneNumber, role],
       (error, results) => {
         if (error) {
-          console.error("Failed to insert user: ", error);
-          return res.status(500).json({ error: "Internal server error" });
+          console.error("Failed to insert user: ", error.Error);
+          return res
+            .status(500)
+            .json({ error: "Internal server error", message: error.Error });
         }
         res.status(201).json({
           message: "User registered successfully",
@@ -110,7 +108,7 @@ app.post("/login", (req, res) => {
 });
 
 // POST endpoint to add a child
-app.post("/api/children", (req, res) => {
+app.post("/api/children/add", (req, res) => {
   const {
     firstname,
     lastname,
@@ -150,11 +148,21 @@ app.post("/api/children", (req, res) => {
   );
 });
 
-// // Error handling middleware
-// app.use((err, req, res, next) => {
-//   console.error(err.stack);
-//   res.status(500).send("Something broke!");
-// });
+app.get("/api/children/:username", (req, res) => {
+  const { username } = req.params; // Extract username from path parameters
+  // Assuming JWT middleware sets `req.user`
+
+  const query = "SELECT * FROM children WHERE username = ?";
+  const params = [username];
+
+  pool.query(query, params, (error, results) => {
+    if (error) {
+      console.error("Failed to retrieve children:", error);
+      return res.status(500).json({ error: "Internal Server Error" });
+    }
+    res.status(200).json(results);
+  });
+});
 
 // Middleware to authenticate and set req.user
 app.use((req, res, next) => {
@@ -170,20 +178,6 @@ app.use((req, res, next) => {
   } else {
     res.status(401).json({ error: "No token provided." });
   }
-});
-
-// GET endpoint to fetch all children for the logged-in user
-app.get("/api/children", (req, res) => {
-  const userId = req.user.id; // Assuming the decoded token contains 'id' of the user
-  const query = PARENT_GET_ALL_CHILDREN;
-
-  pool.execute(query, [userId], (error, results) => {
-    if (error) {
-      console.error("Failed to retrieve children:", error);
-      return res.status(500).json({ error: "Internal Server Error" });
-    }
-    res.status(200).json(results);
-  });
 });
 
 // Start the server
