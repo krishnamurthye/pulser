@@ -33,7 +33,7 @@ const pool = mysql.createPool({
 });
 
 const corsOptions = {
-  origin: "http://localhost:3001", // Replace with the URL of your front-end app
+  origin: "*", // Replace with the URL of your front-end app
   optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
 };
 
