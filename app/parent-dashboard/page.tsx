@@ -70,7 +70,7 @@ const Dashboard = () => {
             <li
               className={`cursor-pointer py-2 px-4 ${
                 activeNavItem === "Children"
-                  ? "bg-blue-400 text-white"
+                  ? "bg-green-400 text-white"
                   : "text-gray-800"
               }`}
               onClick={() => handleNavItemClick("Children")}
@@ -80,7 +80,7 @@ const Dashboard = () => {
             <li
               className={`cursor-pointer py-2 px-4 ${
                 activeNavItem === "LSA Requests"
-                  ? "bg-blue-400 text-white"
+                  ? "bg-green-400 text-white"
                   : "text-gray-800"
               }`}
               onClick={() => handleNavItemClick("LSA Requests")}
@@ -90,7 +90,7 @@ const Dashboard = () => {
             <li
               className={`cursor-pointer py-2 px-4 ${
                 activeNavItem === "Billing"
-                  ? "bg-blue-400 text-white"
+                  ? "bg-green-400 text-white"
                   : "text-gray-800"
               }`}
               onClick={() => handleNavItemClick("Billing")}
@@ -100,7 +100,7 @@ const Dashboard = () => {
             <li
               className={`cursor-pointer py-2 px-4 ${
                 activeNavItem === "Messages"
-                  ? "bg-blue-400 text-white"
+                  ? "bg-green-400 text-white"
                   : "text-gray-800"
               }`}
               onClick={() => handleNavItemClick("Messages")}

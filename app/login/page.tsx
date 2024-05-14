@@ -3,6 +3,7 @@ import { useRouter } from "next/navigation";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { ROLE_MAPPING } from "../utils/constants";
+import { toast } from "react-toastify";
 
 const LoginSchema = Yup.object().shape({
   email: Yup.string().email("Invalid email").required("Email is required"),
@@ -25,7 +26,10 @@ const Login = () => {
 
       const data = await response.json();
       if (response.ok) {
-        console.log("Login successful:", data);
+        toast.success("Login Success!", {
+          position: "bottom-right",
+          className: "custom-toast",
+        });
 
         // Store the token in localStorage
         localStorage.setItem("authToken", data.token);
@@ -101,7 +105,7 @@ const Login = () => {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full bg-blue-400 text-white py-2 rounded-md"
+              className="w-full bg-green-400 text-white py-2 rounded-md"
             >
               {isSubmitting ? "Logging in..." : "Login"}
             </button>

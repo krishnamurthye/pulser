@@ -58,7 +58,7 @@ const LSARRequestsPage = () => {
       <div className="flex justify-between mb-4">
         {/* Add New Request button */}
         <button
-          className="bg-blue-400 text-white py-2 px-4 rounded"
+          className="bg-green-400 text-white py-2 px-4 rounded"
           onClick={handleAddRequest}
         >
           Add New Request

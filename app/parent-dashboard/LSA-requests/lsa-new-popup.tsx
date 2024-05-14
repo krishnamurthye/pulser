@@ -112,7 +112,7 @@ const NewSLARequest = ({ onClose }: any) => {
             </button>
             <button
               type="submit"
-              className="bg-blue-400 text-white px-4 py-2 rounded"
+              className="bg-green-400 text-white px-4 py-2 rounded"
             >
               Save
             </button>

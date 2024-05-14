@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url("react-toastify/dist/ReactToastify.css");
+
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
@@ -22,6 +24,11 @@
   }
 }
 
-.bg-blue-400 {
-  background-color: rgb(37 80 131);
+.bg-green-400 {
+  background-color: rgb(65 109 69);
+}
+
+.custom-toast {
+  z-index: 10000;
+  color: green;
 }

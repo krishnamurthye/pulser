@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import Link from "next/link";
 import * as Yup from "yup";
+import { toast } from "react-toastify";
 
 const RegistrationSchema = Yup.object().shape({
   username: Yup.string().required("Name is required"),
@@ -25,8 +26,6 @@ const Registration = () => {
   const router = useRouter();
 
   const handleSubmit = (values: any, actions: any) => {
-    console.log("handleSubmit =====> ", values);
-
     setTimeout(() => {
       console.log(values);
       actions.setSubmitting(false);
@@ -48,7 +47,13 @@ const Registration = () => {
       })
         .then((response) => response.json())
         .then((data) => {
-          console.log("data =====> ", data);
+          toast.success(
+            "Registration successful. Please login to your account now!",
+            {
+              position: "bottom-right",
+              className: "custom-toast",
+            }
+          );
           router.push("/login");
         })
         .catch((error) => console.error("Error:", error));
@@ -56,7 +61,10 @@ const Registration = () => {
       // router.push("/verification"); // Redirect after successful registration
     } catch (error) {
       console.error("Registration error:", error);
-      // Optionally, provide feedback to the user
+      toast.error("Sorry. Can't register!", {
+        position: "bottom-right",
+        className: "custom-toast",
+      });
     }
   };
 
@@ -202,7 +210,7 @@ const Registration = () => {
             <button
               type="submit"
               // disabled={isSubmitting}
-              className="w-full bg-blue-400 text-white py-2 rounded-md mt-4"
+              className="w-full bg-green-400 text-white py-2 rounded-md mt-4"
             >
               {isSubmitting ? "Submitting..." : "Register"}
             </button>

@@ -28,7 +28,7 @@ const LSADashboard = () => {
             <li
               className={`cursor-pointer py-2 px-4 ${
                 activeNavItem === "Profile"
-                  ? "bg-blue-400 text-white"
+                  ? "bg-green-400 text-white"
                   : "text-gray-800"
               }`}
               onClick={() => handleNavItemClick("Profile")}
@@ -38,7 +38,7 @@ const LSADashboard = () => {
             <li
               className={`cursor-pointer py-2 px-4 ${
                 activeNavItem === "Projects"
-                  ? "bg-blue-400 text-white"
+                  ? "bg-green-400 text-white"
                   : "text-gray-800"
               }`}
               onClick={() => handleNavItemClick("Projects")}
@@ -48,7 +48,7 @@ const LSADashboard = () => {
             <li
               className={`cursor-pointer py-2 px-4 ${
                 activeNavItem === "Payments"
-                  ? "bg-blue-400 text-white"
+                  ? "bg-green-400 text-white"
                   : "text-gray-800"
               }`}
               onClick={() => handleNavItemClick("Payments")}
@@ -58,7 +58,7 @@ const LSADashboard = () => {
             <li
               className={`cursor-pointer py-2 px-4 ${
                 activeNavItem === "Messages"
-                  ? "bg-blue-400 text-white"
+                  ? "bg-green-400 text-white"
                   : "text-gray-800"
               }`}
               onClick={() => handleNavItemClick("Messages")}

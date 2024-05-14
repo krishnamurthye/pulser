@@ -1,6 +1,7 @@
 "use cleint";
 import { useState } from "react";
 import PersonIcon from "../../public/PersonIcon";
+import { toast } from "react-toastify";
 
 const ChildEditPopup = ({
   onClose,
@@ -30,7 +31,6 @@ const ChildEditPopup = ({
   };
 
   const handleSave = async () => {
-    // Assuming formData is an object with the properties you need to send
     console.log(formData);
 
     try {
@@ -44,15 +44,30 @@ const ChildEditPopup = ({
 
       if (response.ok) {
         const result = await response.json();
-        console.log("Success:", result);
-        // Handle any follow-up tasks
+        toast.success("Child added successfully!", {
+          position: "bottom-right",
+          className: "custom-toast",
+        });
+        onClose(); // Close popup and refresh list on success
       } else {
-        throw new Error("Failed to save child data");
+        toast.error("Failed to save child data", {
+          position: "bottom-right",
+          className: "custom-toast",
+        });
       }
     } catch (error) {
       console.error("Error:", error);
+      toast.error("Failed to save child data", {
+        position: "bottom-right",
+        className: "custom-toast",
+      });
     }
   };
+
+  const allFieldsFilled = Object.values(formData).every((value) => {
+    if (typeof value === "boolean") return true; // Ignore booleans for validation
+    return value !== "";
+  });
 
   return (
     <div className="fixed top-0 left-0 w-full h-full bg-gray-800 bg-opacity-50 flex justify-center items-center">
@@ -83,6 +98,7 @@ const ChildEditPopup = ({
                 name="firstName"
                 value={formData.firstName}
                 onChange={handleChange}
+                required
                 className="w-full px-3 py-2 border rounded-md"
               />
             </div>
@@ -96,6 +112,7 @@ const ChildEditPopup = ({
                 name="lastName"
                 value={formData.lastName}
                 onChange={handleChange}
+                required
                 className="w-full px-3 py-2 border rounded-md"
               />
             </div>
@@ -109,6 +126,7 @@ const ChildEditPopup = ({
                 name="dob"
                 value={formData.dob}
                 onChange={handleChange}
+                required
                 className="w-full px-3 py-2 border rounded-md"
               />
             </div>
@@ -125,8 +143,10 @@ const ChildEditPopup = ({
                 name="school"
                 value={formData.school}
                 onChange={handleChange}
+                required
                 className="w-full px-3 py-2 border rounded-md"
               >
+                <option value="">Select School</option>
                 {schoolsList.map((school: any) => (
                   <option key={school.id} value={school.id}>
                     {school.name}
@@ -143,6 +163,7 @@ const ChildEditPopup = ({
                 name="grade"
                 value={formData.grade}
                 onChange={handleChange}
+                required
                 className="w-full px-3 py-2 border rounded-md"
               >
                 <option value="">Select Grade</option>
@@ -162,6 +183,7 @@ const ChildEditPopup = ({
                 name="needLevel"
                 value={formData.needLevel}
                 onChange={handleChange}
+                required
                 className="w-full px-3 py-2 border rounded-md"
               >
                 <option value="">Select Need Level</option>
@@ -182,6 +204,7 @@ const ChildEditPopup = ({
                 name="age"
                 value={formData.age}
                 onChange={handleChange}
+                required
                 className="w-full px-3 py-2 border rounded-md"
               />
             </div>
@@ -194,6 +217,7 @@ const ChildEditPopup = ({
                 name="additionalInfo"
                 value={formData.additionalInfo}
                 onChange={handleChange}
+                required
                 className="w-full px-3 py-2 border rounded-md"
               />
             </div>
@@ -212,7 +236,12 @@ const ChildEditPopup = ({
           <button
             type="button"
             onClick={handleSave}
-            className="bg-blue-400 text-white px-4 py-2 rounded-md"
+            disabled={!allFieldsFilled}
+            className={`px-4 py-2 rounded-md ${
+              allFieldsFilled
+                ? "bg-green-400 text-white"
+                : "bg-gray-400 text-gray-800"
+            }`}
           >
             Save
           </button>

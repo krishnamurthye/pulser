@@ -64,7 +64,7 @@ const Verification = () => {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="px-4 py-2 bg-blue-400 hover:bg-blue-600 text-white rounded-md shadow-sm text-sm font-medium"
+                className="px-4 py-2 bg-green-400 hover:bg-blue-600 text-white rounded-md shadow-sm text-sm font-medium"
               >
                 {isSubmitting ? "Verifying..." : "Verify"}
               </button>

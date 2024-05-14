@@ -65,7 +65,7 @@ const LSAMessagePopUp = ({ onClose }: any) => {
         <div className="mb-4">
           <label className="block mb-2">Attachments</label>
           {/* Add attachment button */}
-          <button className="bg-blue-400 text-white px-4 py-2 rounded">
+          <button className="bg-green-400 text-white px-4 py-2 rounded">
             Add Attachment
           </button>
         </div>
@@ -89,7 +89,7 @@ const LSAMessagePopUp = ({ onClose }: any) => {
           </button>
           <button
             onClick={handleSend}
-            className="bg-blue-400 text-white px-4 py-2 rounded"
+            className="bg-green-400 text-white px-4 py-2 rounded"
           >
             Send
           </button>

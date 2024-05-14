@@ -16,7 +16,7 @@ const Messages = () => {
     <div className="p-4">
       <div className="flex justify-between mb-4">
         <button
-          className="bg-blue-400 text-white py-2 px-4 rounded"
+          className="bg-green-400 text-white py-2 px-4 rounded"
           onClick={handleNewMessage}
         >
           New Message

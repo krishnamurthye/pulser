@@ -6,7 +6,7 @@ import "./globals.css";
 import Head from "next/head";
 import { useRouter } from "next/navigation";
 import { AUTH_TOKEN } from "./utils/constants";
-import { useEffect, useState } from "react";
+import { ToastContainer } from "react-toastify";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,13 +21,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const router = useRouter();
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  // const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  useEffect(() => {
-    // Check if the user is logged in by looking for a token in localStorage
-    const token = localStorage.getItem(AUTH_TOKEN);
-    setIsLoggedIn(!!token);
-  }, []);
+  // useEffect(() => {
+  //   // Check if the user is logged in by looking for a token in localStorage
+  //   const token = localStorage.getItem(AUTH_TOKEN);
+  //   setIsLoggedIn(!!token);
+  // }, []);
 
   const handleLogout = () => {
     // Assuming you're using localStorage to store the token
@@ -37,13 +37,17 @@ export default function RootLayout({
     router.push("/login"); // Adjust the path as necessary, e.g., to home page if that's more appropriate
   };
 
+  const isLoggedIn = () => {
+    return localStorage.getItem(AUTH_TOKEN);
+  };
+
   return (
     <html lang="en">
       <Head>
         <title>Pulsar</title>
       </Head>
       <body className={inter.className}>
-        <header className="bg-blue-400 shadow">
+        <header className="bg-green-400 shadow">
           <div className="sm:px-6 lg:px-8 container mx-auto">
             <div className="flex justify-between items-center py-4">
               <div className="flex items-center">
@@ -64,7 +68,7 @@ export default function RootLayout({
                   Signup
                 </a>
 
-                {!isLoggedIn ? (
+                {!isLoggedIn() ? (
                   <a
                     href="/login"
                     className="text-white hover:text-white-600 px-3 py-2 rounded-md text-sm font-medium"
@@ -82,8 +86,20 @@ export default function RootLayout({
               </div>
             </div>
           </div>
+          <ToastContainer
+            position="bottom-right"
+            autoClose={12000}
+            hideProgressBar={false}
+            newestOnTop={true}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="light"
+          />
+          <ToastContainer />
         </header>
-
         <main>{children}</main>
         <footer className="bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

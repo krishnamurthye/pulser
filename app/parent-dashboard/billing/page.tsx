@@ -16,7 +16,7 @@ const Billing = () => {
     <div className="p-4">
       <div className="flex justify-between mb-4">
         <button
-          className="text-sm font-bold bg-blue-400 text-white py-2 px-2 rounded-md"
+          className="text-sm font-bold bg-green-400 text-white py-2 px-2 rounded-md"
           onClick={handleManagePayment}
         >
           Manage Payment Method

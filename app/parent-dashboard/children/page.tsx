@@ -11,64 +11,48 @@ const Children = ({ gradeList, needLevelList, schoolsList }: any) => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isChildPopupOpen, setIsChildPopupOpen] = useState(false);
   const router = useRouter();
-  const router = useRouter();
-
-  const data = {
-    children: [
-      {
-        id: "1",
-        name: "Child1",
-        email: "one@pulsar.com",
-        phoneNumber: "1234567890",
-        dob: "asas",
-        grade: "asd",
-        needLevel: "asd",
-        status: "asd",
-      },
-    ],
-  };
 
   const token = localStorage.getItem("authToken");
   const username: any = localStorage.getItem("username");
 
   useEffect(() => {
-    const fetchChildren = async () => {
-      let response: any;
-      try {
-        if (!token) {
-          router.push("/login"); // Redirect to login if no token
-          return;
-        }
-
-        const encodedUsername = encodeURIComponent(username);
-        const response = await fetch(
-          `http://localhost:4201/api/children/${encodedUsername}`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
-            },
-          }
-        );
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch");
-        }
-
-        const data = await response.json();
-        setChildren(data); // Assuming the API returns the array of children directly
-      } catch (error: any) {
-        console.error("Failed to fetch children:", error);
-        if (error.message === "Failed to fetch" || response.status === 401) {
-          // Unauthorized access or network error
-          router.push("/login");
-        }
-      }
-    };
-
     fetchChildren();
   }, [router, username]);
+
+  const fetchChildren = async () => {
+    let response: any;
+    try {
+      if (!token) {
+        router.push("/login"); // Redirect to login if no token
+        return;
+      }
+
+      const encodedUsername = encodeURIComponent(username);
+      const response = await fetch(
+        `http://localhost:4201/api/children/${encodedUsername}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch");
+      }
+
+      const data = await response.json();
+      setChildren(data); // Assuming the API returns the array of children directly
+    } catch (error: any) {
+      console.error("Failed to fetch children:", error);
+      if (error.message === "Failed to fetch" || response.status === 401) {
+        // Unauthorized access or network error
+        router.push("/login");
+      }
+    }
+  };
 
   const handleChildClick = () => {
     setIsChildPopupOpen(true);
@@ -84,13 +68,14 @@ const Children = ({ gradeList, needLevelList, schoolsList }: any) => {
 
   const handleClosePopup = () => {
     setIsPopupOpen(false);
+    fetchChildren(); // Refresh the list after closing the popup
   };
 
   return (
     <>
       <div className="flex justify-between mb-4">
         <button
-          className="bg-blue-400 text-white py-2 px-4 rounded"
+          className="bg-green-400 text-white py-2 px-4 rounded"
           onClick={handleAddChildClick}
         >
           Add New

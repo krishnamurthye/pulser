@@ -40,7 +40,7 @@ const ManagePaymentPopup = ({ onClose }: any) => {
 
             {/* Edit/Delete buttons */}
             <div className="flex items-center mb-2">
-              <button className="bg-blue-400 text-white px-2 py-1 rounded mr-2">
+              <button className="bg-green-400 text-white px-2 py-1 rounded mr-2">
                 Edit
               </button>
               <button className="bg-red-500 text-white px-2 py-1 rounded">
@@ -94,7 +94,7 @@ const ManagePaymentPopup = ({ onClose }: any) => {
             >
               Cancel
             </button>
-            <button className="bg-blue-400 text-white px-4 py-2 rounded">
+            <button className="bg-green-400 text-white px-4 py-2 rounded">
               Save
             </button>
           </div>
