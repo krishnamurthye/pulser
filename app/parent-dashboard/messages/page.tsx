@@ -1,3 +1,4 @@
+"use Client";
 import React, { useState } from "react";
 import MessageNewPop from "./messagege-new-popup";
 

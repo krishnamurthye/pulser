@@ -38,7 +38,13 @@ export default function RootLayout({
   };
 
   const isLoggedIn = () => {
-    return localStorage.getItem(AUTH_TOKEN);
+    if (typeof window !== "undefined") {
+      // Code to run in the browser
+      const loggedIn = localStorage.getItem("AUTH_TOKEN") === "true";
+      return loggedIn;
+    }
+
+    // return localStorage.getItem(AUTH_TOKEN);
   };
 
   return (

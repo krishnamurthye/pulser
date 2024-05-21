@@ -27,7 +27,7 @@ const Login = () => {
       const data = await response.json();
       if (response.ok) {
         toast.success("Login Success!", {
-          position: "bottom-right",
+          position: "top-right",
           className: "custom-toast",
         });
 
@@ -50,7 +50,10 @@ const Login = () => {
         }
       } else {
         console.error("Login failed:", data.message);
-        alert(data.message);
+        toast.error(data.message, {
+          position: "top-right",
+          className: "custom-toast",
+        });
       }
     } catch (error) {
       console.error("Network error:", error);

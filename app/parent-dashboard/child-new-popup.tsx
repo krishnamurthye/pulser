@@ -45,20 +45,20 @@ const ChildEditPopup = ({
       if (response.ok) {
         const result = await response.json();
         toast.success("Child added successfully!", {
-          position: "bottom-right",
+          position: "top-right",
           className: "custom-toast",
         });
         onClose(); // Close popup and refresh list on success
       } else {
         toast.error("Failed to save child data", {
-          position: "bottom-right",
+          position: "top-right",
           className: "custom-toast",
         });
       }
     } catch (error) {
       console.error("Error:", error);
       toast.error("Failed to save child data", {
-        position: "bottom-right",
+        position: "top-right",
         className: "custom-toast",
       });
     }
