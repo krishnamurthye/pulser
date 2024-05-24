@@ -7,6 +7,8 @@ const jwt = require("jsonwebtoken");
 const gradeList = require("./config/grades-list.json");
 const needLevelList = require("./config/need-levels-list.json");
 const schoolsList = require("./config/schools-list.json");
+const { v4: uuidv4 } = require("uuid");
+const crypto = require("crypto");
 
 const {
   LOGIN_SELECT_ALL_USERS,
@@ -37,13 +39,28 @@ const corsOptions = {
   optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
 };
 
+function secureRandomId() {
+  return crypto.randomInt(0, 2147483647); // Ensure it's within the range for a signed INT
+}
+
 app.use(cors(corsOptions));
 
 // Middleware to parse JSON bodies
 app.use(bodyParser.json());
 
 app.post("/register", (req, res) => {
-  const { username, email, password, phoneNumber, role } = req.body;
+  console.log("registrationv =====> ", req.body);
+
+  const {
+    firstName,
+    lastName,
+    dob,
+    nationality,
+    phoneNumber,
+    email,
+    password,
+    userType,
+  } = req.body;
 
   bcrypt.hash(password, saltRounds, function (err, hash) {
     if (err) {
@@ -51,10 +68,22 @@ app.post("/register", (req, res) => {
     }
     pool.execute(
       REGISTRATION_ADD_USER,
-      [username, email, hash, phoneNumber, role],
+      [
+        secureRandomId(),
+        firstName,
+        lastName,
+        dob,
+        nationality,
+        phoneNumber,
+        1,
+        new Date(),
+        secureRandomId(),
+        userType,
+        1,
+      ],
       (error, results) => {
         if (error) {
-          console.error("Failed to insert user: ", error.Error);
+          console.error("Failed to insert user: ", error);
           return res
             .status(500)
             .json({ error: "Internal server error", message: error.Error });
