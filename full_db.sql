@@ -1,191 +1,124 @@
 -- DROP database IF EXISTS pulserdb;
 
-CREATE DATABASE IF NOT EXISTS pulserdb;
+-- CREATE DATABASE IF NOT EXISTS pulserdb;
 
-use pulserdb;
+-- use pulserdb;
 
-CREATE TABLE `Authentication` (
-  `id1` integer PRIMARY KEY,
-  `auth_user_id` integer,
-  `created_at` timestamp,
-  `updated_at` timestamp,
-  `username` varchar(255),
-  `password` varchar(255),
-  `failedAttempts` integer
+-- Create the referenced tables first
+CREATE TABLE IF NOT EXISTS `role` (
+  `id` INTEGER PRIMARY KEY,
+  `roleName` VARCHAR(255),
+  `isActive` BOOLEAN
 );
 
-CREATE TABLE `users` (
-  `id` integer PRIMARY KEY,
-  `firstName` varchar(255),
-  `lastName` varchar(255),
-  `role` integer,
-  `created_at` timestamp,
-  `parentId` integer,
-  `userType` integer,
-  `phoneNumber` varchar(255),
-  `dob` timestamp,
-  `isActive` bool,
-  `nationality` integer
+CREATE TABLE IF NOT EXISTS `nationality` (
+  `id` INTEGER PRIMARY KEY,
+  `name` VARCHAR(255),
+  `isActive` BOOLEAN
 );
 
-CREATE TABLE `role` (
-  `id` integer PRIMARY KEY,
-  `roleName` varchar(255),
-  `isActive` bool
+CREATE TABLE IF NOT EXISTS `needLevel` (
+  `id` INTEGER PRIMARY KEY,
+  `Level` VARCHAR(255),
+  `isActive` BOOLEAN
 );
 
-CREATE TABLE `nationality` (
-  `id` integer PRIMARY KEY,
-  `name` varchar(255),
-  `isActive` bool
+CREATE TABLE IF NOT EXISTS `schoolSystem` (
+  `id` INTEGER PRIMARY KEY,
+  `schoolSystem` VARCHAR(255),
+  `isActive` BOOLEAN
 );
 
-CREATE TABLE `schooling` (
-  `id` integer PRIMARY KEY,
-  `userId` integer,
-  `schoolSystem` integer,
-  `grade` integer,
-  `schoolId` integer,
-  `status` integer,
-  `created_at` timestamp,
-  `needLevel` integer,
-  `additionalDetails` varchar(255)
+CREATE TABLE IF NOT EXISTS `ethnicity` (
+  `id` INTEGER PRIMARY KEY,
+  `ethnicity` VARCHAR(255),
+  `isActive` BOOLEAN
 );
 
-CREATE TABLE `userType` (
-  `id` integer PRIMARY KEY,
-  `userType` varchar(255),
-  `isActive` bool
+CREATE TABLE IF NOT EXISTS `education` (
+  `id` INTEGER PRIMARY KEY,
+  `education` VARCHAR(255),
+  `isActive` BOOLEAN
 );
 
-CREATE TABLE `schoolSystem` (
-  `id` integer PRIMARY KEY,
-  `schoolSystem` varchar(255),
-  `isActive` bool
+CREATE TABLE IF NOT EXISTS `specialization` (
+  `id` INTEGER PRIMARY KEY,
+  `specialization` VARCHAR(255),
+  `isActive` BOOLEAN
 );
 
-CREATE TABLE `schoolName` (
-  `id` integer PRIMARY KEY,
-  `schoolSystem` integer,
-  `schoolName` varchar(255),
-  `isActive` bool
+
+CREATE TABLE IF NOT EXISTS `schoolName` (
+  `id` INTEGER PRIMARY KEY,
+  `schoolSystem` INTEGER,
+  `schoolName` VARCHAR(255),
+  `isActive` BOOLEAN,
+  FOREIGN KEY (`schoolSystem`) REFERENCES `schoolSystem`(`id`)
 );
 
-CREATE TABLE `grade` (
-  `id` integer PRIMARY KEY,
-  `grade` varchar(255),
-  `isActive` bool
+-- Create the dependent tables after the referenced tables
+CREATE TABLE IF NOT EXISTS `users` (
+  `id` INTEGER PRIMARY KEY,
+  `firstName` VARCHAR(255),
+  `lastName` VARCHAR(255),
+  `role` INTEGER,
+  `created_at` TIMESTAMP,
+  `parentId` INTEGER,
+  `userType` INTEGER,
+  `phoneNumber` VARCHAR(255),
+  `dob` TIMESTAMP,
+  `isActive` BOOLEAN,
+  `nationality` INTEGER,
+  FOREIGN KEY (`role`) REFERENCES `role`(`id`),
+  FOREIGN KEY (`nationality`) REFERENCES `nationality`(`id`)
 );
 
-CREATE TABLE `needLevel` (
-  `id` integer PRIMARY KEY,
-  `Level` varchar(255),
-  `isActive` bool
+CREATE TABLE IF NOT EXISTS `Authentication` (
+  `id1` INTEGER PRIMARY KEY,
+  `auth_user_id` INTEGER,
+  `created_at` TIMESTAMP,
+  `updated_at` TIMESTAMP,
+  `username` VARCHAR(255),
+  `password` VARCHAR(255),
+  `failedAttempts` INTEGER
 );
 
-CREATE TABLE `LSADetails` (
-  `id` integer PRIMARY KEY,
-  `userId` integer,
-  `ethnicity` integer,
-  `education` integer,
-  `specialization` integer
+CREATE TABLE IF NOT EXISTS `schooling` (
+  `id` INTEGER PRIMARY KEY,
+  `userId` INTEGER,
+  `schoolSystem` INTEGER,
+  `grade` INTEGER,
+  `schoolId` INTEGER,
+  `status` INTEGER,
+  `created_at` TIMESTAMP,
+  `needLevel` INTEGER,
+  `additionalDetails` VARCHAR(255),
+  FOREIGN KEY (`needLevel`) REFERENCES `needLevel`(`id`),
+  FOREIGN KEY (`userId`) REFERENCES `users`(`id`),
+  FOREIGN KEY (`schoolSystem`) REFERENCES `schoolSystem`(`id`),
+  FOREIGN KEY (`schoolId`) REFERENCES `schoolName`(`id`)
 );
 
-CREATE TABLE `ethnicity` (
-  `id` integer PRIMARY KEY,
-  `ethnicity` varchar(255),
-  `isActive` bool
+CREATE TABLE IF NOT EXISTS `userType` (
+  `id` INTEGER PRIMARY KEY,
+  `userType` VARCHAR(255),
+  `isActive` BOOLEAN
 );
 
-CREATE TABLE `education` (
-  `id` integer PRIMARY KEY,
-  `education` varchar(255),
-  `isActive` bool
+CREATE TABLE IF NOT EXISTS `grade` (
+  `id` INTEGER PRIMARY KEY,
+  `grade` VARCHAR(255),
+  `isActive` BOOLEAN
 );
 
-CREATE TABLE `specialization` (
-  `id` integer PRIMARY KEY,
-  `specialization` varchar(255),
-  `isActive` bool
+CREATE TABLE IF NOT EXISTS `LSADetails` (
+  `id` INTEGER PRIMARY KEY,
+  `userId` INTEGER,
+  `ethnicity` INTEGER,
+  `education` INTEGER,
+  `specialization` INTEGER,
+  FOREIGN KEY (`userId`) REFERENCES `users`(`id`),
+  FOREIGN KEY (`ethnicity`) REFERENCES `ethnicity`(`id`),
+  FOREIGN KEY (`education`) REFERENCES `education`(`id`),
+  FOREIGN KEY (`specialization`) REFERENCES `specialization`(`id`)
 );
-
-CREATE TABLE `las_files` (
-  `id` integer PRIMARY KEY,
-  `userId` integer,
-  `fileType` integer,
-  `fileName` varchar(255),
-  `fileContent` bool
-);
-
-CREATE TABLE `experience` (
-  `id` integer PRIMARY KEY,
-  `lsa_userId` integer,
-  `student_userId` integer,
-  `parent_userId` integer,
-  `start_date` timestamp,
-  `end_date` timestamp,
-  `rating` decimal,
-  `comments` varchar(255)
-);
-
-CREATE TABLE `lsaRequest` (
-  `id` integer PRIMARY KEY,
-  `raisedBy` integer,
-  `age` integer,
-  `grade` integer,
-  `school` integer,
-  `needs` integer,
-  `start_date` timestamp,
-  `end_date` timestamp,
-  `lsaType` integer,
-  `experience` integer,
-  `comments` varchar(255)
-);
-
-CREATE TABLE `experienceLevel` (
-  `id` integer PRIMARY KEY,
-  `experience` varchar(255),
-  `isActive` bool
-);
-
-ALTER TABLE `users` ADD FOREIGN KEY (`nationality`) REFERENCES `nationality` (`id`);
-
-ALTER TABLE `schooling` ADD FOREIGN KEY (`schoolSystem`) REFERENCES `schoolSystem` (`id`);
-
-ALTER TABLE `schoolName` ADD FOREIGN KEY (`schoolSystem`) REFERENCES `schoolSystem` (`id`);
-
-ALTER TABLE `schooling` ADD FOREIGN KEY (`schoolId`) REFERENCES `schoolName` (`id`);
-
-ALTER TABLE `schooling` ADD FOREIGN KEY (`grade`) REFERENCES `grade` (`id`);
-
-ALTER TABLE `LSADetails` ADD FOREIGN KEY (`userId`) REFERENCES `users` (`id`);
-
-ALTER TABLE `LSADetails` ADD FOREIGN KEY (`ethnicity`) REFERENCES `ethnicity` (`id`);
-
-ALTER TABLE `LSADetails` ADD FOREIGN KEY (`education`) REFERENCES `education` (`id`);
-
-ALTER TABLE `LSADetails` ADD FOREIGN KEY (`specialization`) REFERENCES `specialization` (`id`);
-
-ALTER TABLE `las_files` ADD FOREIGN KEY (`id`) REFERENCES `users` (`id`);
-
-ALTER TABLE `lsaRequest` ADD FOREIGN KEY (`raisedBy`) REFERENCES `users` (`id`);
-
-ALTER TABLE `lsaRequest` ADD FOREIGN KEY (`grade`) REFERENCES `grade` (`id`);
-
-ALTER TABLE `lsaRequest` ADD FOREIGN KEY (`school`) REFERENCES `schoolName` (`id`);
-
-ALTER TABLE `lsaRequest` ADD FOREIGN KEY (`lsaType`) REFERENCES `specialization` (`id`);
-
-ALTER TABLE `lsaRequest` ADD FOREIGN KEY (`experience`) REFERENCES `experienceLevel` (`id`);
-
-ALTER TABLE `schooling` ADD FOREIGN KEY (`userId`) REFERENCES `users` (`id`);
-
-ALTER TABLE `Authentication` ADD FOREIGN KEY (`auth_user_id`) REFERENCES `users` (`id`);
-
-ALTER TABLE `users` ADD FOREIGN KEY (`parentId`) REFERENCES `users` (`id`);
-
-ALTER TABLE `users` ADD FOREIGN KEY (`role`) REFERENCES `role` (`id`);
-
-ALTER TABLE `users` ADD FOREIGN KEY (`userType`) REFERENCES `users` (`id`);
-
-ALTER TABLE `schooling` ADD FOREIGN KEY (`needLevel`) REFERENCES `needLevel` (`id`);
