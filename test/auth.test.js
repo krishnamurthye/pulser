@@ -11,8 +11,9 @@ beforeAll(async () => {
   // Clear users table before running tests
   await User.destroy({ where: {} });
   await Authentication.destroy({ where: {} });
+  
   }catch(error){
-    console.warn(" error while destroying");
+    console.warn(" error while destroying", error);
   }
 });
 
@@ -23,7 +24,8 @@ afterAll(async () => {
        await new Promise((resolve) => server.close(resolve));  // Properly close the server
     }
     if (sequelize){
-    await sequelize.close();  // Close Sequelize connection
+      await sequelize.drop()
+      await sequelize.close();  // Close Sequelize connection
     }
     await new Promise(resolve => setTimeout(() => resolve(), 1000)); // Wait for async operations to complete
 

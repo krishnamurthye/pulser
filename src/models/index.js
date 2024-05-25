@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize');
-const UserModel = require('./user');
+const userModel = require('./user');
 const AuthModel = require('./authentication');
 
 const sequelize = new Sequelize({
@@ -10,11 +10,11 @@ const sequelize = new Sequelize({
   host: 'localhost',
 });
 
-const User = UserModel(sequelize, Sequelize);
+const user1 = userModel(sequelize, Sequelize);
 const Authentication = AuthModel(sequelize, Sequelize);
 
-User.hasOne(Authentication, { foreignKey: 'auth_user_id' });
-Authentication.belongsTo(User, { foreignKey: 'auth_user_id' });
+user1.hasOne(Authentication, { foreignKey: 'auth_user_id' });
+Authentication.belongsTo(user1, { foreignKey: 'auth_user_id' });
 
 sequelize.sync().then(() => {
   console.log('Index.js Database & tables created!');
@@ -22,7 +22,7 @@ sequelize.sync().then(() => {
 
 module.exports = {
     sequelize,
-    User,
+    User: user1,
     Authentication,
   };
   
