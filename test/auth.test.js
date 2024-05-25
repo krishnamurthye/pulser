@@ -5,10 +5,15 @@ const { app, server } = require('../src/app');
 const { User, Authentication, sequelize } = require('../src/models');
 
 
+// May not required because setup is doing the same
 beforeAll(async () => {
+  try{
   // Clear users table before running tests
   await User.destroy({ where: {} });
   await Authentication.destroy({ where: {} });
+  }catch(error){
+    console.warn(" error while destroying");
+  }
 });
 
 afterAll(async () => {
@@ -31,7 +36,7 @@ describe('POST /api/auth/register', () => {
       lastName: 'Doe',
       role: 1,
       phoneNumber: '1234567890',
-      username: 'johndoe',
+      email: 'johndoe@gmail.com',
       password: 'password123'
     };
 
@@ -61,7 +66,7 @@ describe('POST /api/auth/register', () => {
       lastName: 'Doe',
       role: 2,
       phoneNumber: '1234567890',
-      username: 'janedoe',
+      email: 'johndoe@gmail.com',
       password: 'password123'
     };
 
@@ -74,6 +79,6 @@ describe('POST /api/auth/register', () => {
       .send(existingUserData);
 
     expect(response.statusCode).toBe(400);
-    expect(response.body).toHaveProperty('error', 'User with this phone number already exists');
+    expect(response.body).toHaveProperty('error', 'User with this email already exists');
   });
 });

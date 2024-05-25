@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
-const UserModel = require('./User');
-const AuthModel = require('./Authentication');
+const UserModel = require('./user');
+const AuthModel = require('./authentication');
 
 const sequelize = new Sequelize({
   dialect: 'mysql',
@@ -17,12 +17,12 @@ User.hasOne(Authentication, { foreignKey: 'auth_user_id' });
 Authentication.belongsTo(User, { foreignKey: 'auth_user_id' });
 
 sequelize.sync().then(() => {
-  console.log('Database & tables created!');
+  console.log('Index.js Database & tables created!');
 });
 
 module.exports = {
+    sequelize,
     User,
     Authentication,
-    sequelize,  // Export the sequelize instance for closing
   };
   

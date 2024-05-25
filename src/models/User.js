@@ -9,6 +9,7 @@ module.exports = function(sequelize, DataTypes) {
       },
       firstName: DataTypes.STRING,
       lastName: DataTypes.STRING,
+      email:DataTypes.STRING,
       role: DataTypes.INTEGER,
       createdAt: DataTypes.DATE,
       parentId: DataTypes.INTEGER,
