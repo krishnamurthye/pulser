@@ -29,6 +29,11 @@ router.post('/register', async (req, res) => {
 
     const roles = getUserRoles();
     console.log(" *** roles ** ", roles);
+    if (roles.length === 0) {
+      // Call the load method
+      await loadUserRoles();
+    }
+ 
 
     try{
       const roleId = parseInt(role); // Convert role to an integer
