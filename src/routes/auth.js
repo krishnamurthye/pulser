@@ -28,12 +28,21 @@ router.post('/register', async (req, res) => {
     }
 
     const roles = getUserRoles();
-    const validRole = roles.find(r => r.id === role);
+    console.log(" *** roles ** ", roles);
 
-    if (!validRole) {
-      console.error("role does not exists", role, validRole)
+    try{
+      const roleId = parseInt(role); // Convert role to an integer
+      const validRole = roles.find((r) => r.id === roleId);
+
+      if (!validRole) {
+        console.error("role does not exists", role, validRole)
+        return res.status(500).json({ error: 'Invalid request' });
+      }
+    } catch(error){
+      console.error("role parsing issue",error);
       return res.status(500).json({ error: 'Invalid request' });
     }
+    
 
     // Create a new user
     const newUser = await appUser.create({ firstName, lastName, email, role, phoneNumber });

@@ -7,7 +7,7 @@ async function loadUserRoles() {
   try {
     const filePath = path.join(__dirname, '../../config/role.json'); // Adjust the path if necessary
     userRoles = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
-    console.log(" userRole-> ", userRole);
+    console.log(" userRole-> ", userRoles);
     
     for (const role of userRoles) {
       await userRole.findOrCreate({
