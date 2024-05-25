@@ -1,7 +1,7 @@
 // src/models/User.js
 
 module.exports = function(sequelize, DataTypes) {
-    const User = sequelize.define('user', {
+    return sequelize.define('appUser', {
       id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -18,8 +18,9 @@ module.exports = function(sequelize, DataTypes) {
       dob: DataTypes.DATE,
       isActive: DataTypes.BOOLEAN,
       nationality: DataTypes.INTEGER
+    }
+    ,{
+      tableName: 'app_user',
+      timestamps: true,
     });
-  
-    return User;
   };
-  

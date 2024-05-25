@@ -4,6 +4,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const authRoutes = require('./routes/auth');
 const { sequelize } = require('./models');
+const { loadUserRoles, getUserRoles } = require('./loaders/loadRoles');
+
 
 
 const app = express();
@@ -19,10 +21,16 @@ const server = app.listen(PORT, async () => {
     try {
       await sequelize.sync();  // Sync all models
       console.log('Database & tables created!');
+
+      console.log('load user roles');
+      await loadUserRoles();
+
+      console.log('loaded');
+
     } catch (error) {
       console.error('Unable to sync database:', error);
     }
   });
 
 
-module.exports = { app, server };  
+module.exports = { app, server};  

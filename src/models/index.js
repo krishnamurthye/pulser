@@ -1,6 +1,7 @@
 const Sequelize = require('sequelize');
-const userModel = require('./user');
-const AuthModel = require('./authentication');
+const userRoleModel = require('./userRole');
+const appUserModel = require('./appUser');
+const authModel = require('./authentication');
 
 const sequelize = new Sequelize({
   dialect: 'mysql',
@@ -10,19 +11,32 @@ const sequelize = new Sequelize({
   host: 'localhost',
 });
 
-const user1 = userModel(sequelize, Sequelize);
-const Authentication = AuthModel(sequelize, Sequelize);
+const userRole = userRoleModel(sequelize, Sequelize);
 
-user1.hasOne(Authentication, { foreignKey: 'auth_user_id' });
-Authentication.belongsTo(user1, { foreignKey: 'auth_user_id' });
+const appUser = appUserModel(sequelize, Sequelize);
+const authentication = authModel(sequelize, Sequelize);
+
+appUser.hasOne(authentication, { foreignKey: 'auth_user_id' });
+authentication.belongsTo(appUser, { foreignKey: 'auth_user_id' });
+// appUser.belongsTo(userRole, { foreignKey: 'role' });
 
 sequelize.sync().then(() => {
   console.log('Index.js Database & tables created!');
 });
 
-module.exports = {
-    sequelize,
-    User: user1,
-    Authentication,
+  
+
+  const models = {
+    appUser,
+    authentication,
+    userRole,
   };
+  
+  Object.keys(models).forEach(modelName => {
+    if ('associate' in models[modelName]) {
+      models[modelName].associate(models);
+    }
+  });
+  
+  module.exports = {sequelize, ...models };
   
