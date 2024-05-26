@@ -1,4 +1,3 @@
-
 // src/routes/auth.js
 
 const express = require('express');
@@ -7,9 +6,7 @@ const { loadUserRoles, getUserRoles } = require('../loaders/loadRoles');
 const { hashPassword, comparePassword } = require('../util/passwordUtil');
 const jwt = require('jsonwebtoken');
 
-
 const router = express.Router();
-
 
 router.post('/register', async (req, res) => {
   try {
@@ -37,7 +34,6 @@ router.post('/register', async (req, res) => {
       await loadUserRoles();
     }
  
-
     try{
       const roleId = parseInt(role); // Convert role to an integer
       const validRole = roles.find((r) => r.id === roleId);
@@ -51,7 +47,6 @@ router.post('/register', async (req, res) => {
       return res.status(500).json({ error: 'Invalid request' });
     }
     
-
     // Create a new user
     const newUser = await appUser.create({ firstName, lastName, email, role, phoneNumber });
 
@@ -76,7 +71,6 @@ router.post('/register', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
-
 
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
