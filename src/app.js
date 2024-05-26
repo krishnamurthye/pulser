@@ -1,10 +1,11 @@
 //app.js
-
+require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const authRoutes = require('./routes/auth');
 const { sequelize } = require('./models');
 const { loadUserRoles, getUserRoles } = require('./loaders/loadRoles');
+let isServerUp=false;
 
 
 
@@ -26,11 +27,14 @@ const server = app.listen(PORT, async () => {
       await loadUserRoles();
 
       console.log('loaded');
-
+      isServerUp=true;
     } catch (error) {
       console.error('Unable to sync database:', error);
     }
   });
 
+  function isServerReady() {
+    return isServerUp;
+}
 
-module.exports = { app, server};  
+module.exports = { app, server, isServerReady};  

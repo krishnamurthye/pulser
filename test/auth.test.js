@@ -1,38 +1,8 @@
 const request = require('supertest');
 // const app = require('../src/app');
 const bcrypt = require('bcryptjs');
-const { app, server } = require('../src/app'); 
+const { app, server, isServerReady } = require('../src/app'); 
 const { appUser, authentication, sequelize } = require('../src/models');
-
-// May not required because setup is doing the same
-beforeAll(async () => {
-  try{
-  // Clear users table before running tests
-  await appUser.destroy({ where: {} });
-  await authentication.destroy({ where: {} });
-  
-  }catch(error){
-    console.warn(" error while destroying", error);
-  }
-});
-
-afterAll(async () => {
-    
-    // Close the server and database connection after tests
-    if (server) {
-       await new Promise((resolve) => server.close(resolve));  // Properly close the server
-       
-    }
-    if(server){
-      await server.close();
-    }
-    if (sequelize){
-      // await sequelize.drop()
-      await sequelize.close();  // Close Sequelize connection
-    }
-    await new Promise(resolve => setTimeout(() => resolve(), 1000)); // Wait for async operations to complete
-
-  });
   
 describe('POST /api/auth/register', () => {
   it('should register a new user', async () => {
