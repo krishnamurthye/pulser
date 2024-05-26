@@ -10,11 +10,11 @@ const updateUserProfile = async (req, res) => {
       return res.status(404).json({ error: 'User not found' });
     }
 
-   let typeVal = type;
+    let typeVal = type;
     if (!type) {
       typeVal = 'home';
     }
-console.log("typeVal: type: " + typeVal + " :" +type)
+    console.log("typeVal: type: " + typeVal + " :" +type)
     const addressModel = await address.create({
         userId,
         type:typeVal,

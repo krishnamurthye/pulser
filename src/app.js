@@ -6,6 +6,7 @@ const authRoutes = require('./routes/auth');
 const { sequelize } = require('./models');
 const { loadUserRoles, getUserRoles } = require('./loaders/loadRoles');
 const profileRoutes = require('./routes/profile');
+const parentRoutes = require('./routes/child');
 let isServerUp=false;
 
 const app = express();
@@ -14,6 +15,7 @@ app.use(bodyParser.json());
 
 app.use('/api/auth', authRoutes);
 app.use('/api/profile', profileRoutes);
+app.use('/api/parent', parentRoutes);
 
 const PORT = process.env.PORT || 3000;
 const server = app.listen(PORT, async () => {

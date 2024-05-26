@@ -19,7 +19,7 @@ describe('Authentication Middleware', () => {
 
   afterAll(async () => {
     // await appUser.destroy({ where: { email: 'test@example.com' } });
-    server.close();
+    await server.close();
   });
 
   test('should return 401 if no token is provided', async () => {
@@ -36,4 +36,20 @@ describe('Authentication Middleware', () => {
     expect(response.status).toBe(200);
     expect(response.body.message).toBe('Profile updated successfully');
   });
+
+  it('should add a child when valid input is provided', async () => {
+    const response = await request(app)
+      .post('/api/parent/add/child')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        firstName: 'child',
+        lastName: 'Doe',
+        dob: '2005-01-01',
+        school: 'ABC School' // Assuming 'school' is a valid property for adding a child
+      });
+
+    expect(response.status).toBe(201); // Assuming you return a 201 status code upon successful creation
+    expect(response.body.message).toBe('Child added successfully');
+  });
+
 });
