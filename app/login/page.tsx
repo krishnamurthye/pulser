@@ -4,6 +4,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { ROLE_MAPPING } from "../utils/constants";
 import { toast } from "react-toastify";
+import { authRoute, buildUrl } from "../utils/api";
 
 const LoginSchema = Yup.object().shape({
   email: Yup.string().email("Invalid email").required("Email is required"),
@@ -16,7 +17,7 @@ const Login = () => {
   const handleSubmit = async (values: any, actions: any) => {
     const { email, password } = values;
     try {
-      const response = await fetch("http://localhost:3000/api/auth/login", {
+      const response = await fetch(buildUrl(authRoute, "login"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

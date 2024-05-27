@@ -7,6 +7,7 @@ import Link from "next/link";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
 import { ROLES } from "../utils/constants";
+import { authRoute, buildUrl } from "../utils/api";
 
 const RegistrationSchema = Yup.object().shape({
   firstName: Yup.string().required("First name is required"),
@@ -37,8 +38,7 @@ const Registration = () => {
 
   const handleSubmit = async (values, actions) => {
     try {
-      console.log(values);
-      const response = await fetch("http://localhost:3000/api/auth/register", {
+      const response = await fetch(buildUrl(authRoute, "register"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
