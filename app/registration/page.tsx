@@ -6,6 +6,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import Link from "next/link";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
+import { ROLES } from "../utils/constants";
 
 const RegistrationSchema = Yup.object().shape({
   firstName: Yup.string().required("First name is required"),
@@ -22,8 +23,14 @@ const RegistrationSchema = Yup.object().shape({
     .required("Confirm Password is required")
     .oneOf([Yup.ref("password")], "Passwords must match"),
   userType: Yup.string().required("Please select a role"),
-  nationality: Yup.number().required("Please enter nationality"),
+  // nationality: Yup.number().required("Please enter nationality"),
 });
+
+const getUserRole = (userType: any) => {
+  return ROLES.find(
+    (role) => role.roleName.toLowerCase() === userType.toLowerCase()
+  )?.id;
+};
 
 const Registration = () => {
   const router = useRouter();
@@ -31,7 +38,7 @@ const Registration = () => {
   const handleSubmit = async (values, actions) => {
     try {
       console.log(values);
-      const response = await fetch("http://localhost:4201/register", {
+      const response = await fetch("http://localhost:3000/api/auth/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -43,8 +50,8 @@ const Registration = () => {
           dob: values.dob,
           password: values.password,
           phoneNumber: values.phoneNumber,
-          userType: values.userType,
-          nationality: values.nationality,
+          role: getUserRole(values.userType),
+          // nationality: values.nationality,
         }),
       });
 
@@ -81,7 +88,7 @@ const Registration = () => {
           lastName: "",
           email: "",
           dob: "",
-          nationality: "",
+          // nationality: "",
           password: "",
           phoneNumber: "",
           userType: "Parent",
@@ -196,7 +203,7 @@ const Registration = () => {
                 className="text-red-600"
               />
             </div>
-            <div className="mb-4">
+            {/* <div className="mb-4">
               <label htmlFor="nationality" className="block mb-2">
                 Nationality
               </label>
@@ -211,7 +218,7 @@ const Registration = () => {
                 component="div"
                 className="text-red-600"
               />
-            </div>
+            </div> */}
             <div className="mb-4">
               <label htmlFor="password" className="block mb-2">
                 Password

@@ -29,7 +29,7 @@ const Children = ({ gradeList, needLevelList, schoolsList }: any) => {
 
       const encodedUsername = encodeURIComponent(username);
       const response = await fetch(
-        `http://localhost:4201/api/children/${encodedUsername}`,
+        `http://localhost:3000/api/children/${encodedUsername}`,
         {
           method: "GET",
           headers: {
