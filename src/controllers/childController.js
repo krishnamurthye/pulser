@@ -41,3 +41,38 @@ exports.addChild = async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+
+
+// Controller function to add a new child under an existing parent
+exports.listChild = async (req, res) => {
+  try {
+    // Parse request body
+    const authUserId = req.authUser.id;
+
+    // Find the parent in the database
+    const parent = await appUser.findByPk(authUserId);
+
+    //TODO check userType should be parent
+
+
+    // Check if parent exists
+    if (!parent) {
+      return res.status(404).json({ error: 'Parent not found' });
+    }
+
+    // Create the child under the parent
+    const children = await appUser.findAll({
+      where: {
+        parentId: parent.id,
+        userType: 2  // Assuming userType 2 is for children
+      },
+      attributes: ['id', 'firstName', 'lastName', 'dob', 'email']
+    });
+
+    res.status(200).json(children);
+    // Respond with the newly created child
+  } catch (error) {
+    console.error('Error adding child:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
