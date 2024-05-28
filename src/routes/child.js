@@ -7,5 +7,6 @@ const childController = require('../controllers/childController');
 
 // Route to add a new child under an existing parent
 router.post('/add/child', authenticateToken, childController.addChild);
+router.get('/list/child', authenticateToken, childController.listChild);
 
 module.exports = router;
