@@ -7,6 +7,7 @@ import Head from "next/head";
 import { useRouter } from "next/navigation";
 import { AUTH_TOKEN } from "./utils/constants";
 import { ToastContainer } from "react-toastify";
+import { useEffect, useState } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,13 +22,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const router = useRouter();
-  // const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  // useEffect(() => {
-  //   // Check if the user is logged in by looking for a token in localStorage
-  //   const token = localStorage.getItem(AUTH_TOKEN);
-  //   setIsLoggedIn(!!token);
-  // }, []);
+  useEffect(() => {
+    // Check if the user is logged in by looking for a token in localStorage
+    const token = localStorage.getItem(AUTH_TOKEN);
+    setIsLoggedIn(!!token);
+  }, []);
 
   const handleLogout = () => {
     // Assuming you're using localStorage to store the token
@@ -37,15 +38,15 @@ export default function RootLayout({
     router.push("/login"); // Adjust the path as necessary, e.g., to home page if that's more appropriate
   };
 
-  const isLoggedIn = () => {
-    if (typeof window !== "undefined") {
-      // Code to run in the browser
-      const loggedIn = localStorage.getItem("AUTH_TOKEN") === "true";
-      return loggedIn;
-    }
+  // const isLoggedIn = () => {
+  //   if (typeof window !== "undefined") {
+  //     // Code to run in the browser
+  //     const loggedIn = localStorage.getItem("AUTH_TOKEN") === "true";
+  //     return loggedIn;
+  //   }
 
-    // return localStorage.getItem(AUTH_TOKEN);
-  };
+  //   // return localStorage.getItem(AUTH_TOKEN);
+  // };
 
   return (
     <html lang="en">
@@ -74,7 +75,7 @@ export default function RootLayout({
                   Signup
                 </a>
 
-                {!isLoggedIn() ? (
+                {!isLoggedIn ? (
                   <a
                     href="/login"
                     className="text-white hover:text-white-600 px-3 py-2 rounded-md text-sm font-medium"

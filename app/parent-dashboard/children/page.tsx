@@ -5,6 +5,9 @@ import ChildContactCard from "../child-contact-card";
 import ChildTable from "../child-table";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { buildUrl, parentRoute } from "@/app/utils/api";
+import { getAllChildren } from "@/app/apis/api-calls";
+import { getFormattedDate } from "@/app/utils/util-fn";
 
 const Children = ({ gradeList, needLevelList, schoolsList }: any) => {
   const [children, setChildren] = useState([]);
@@ -12,7 +15,6 @@ const Children = ({ gradeList, needLevelList, schoolsList }: any) => {
   const [isChildPopupOpen, setIsChildPopupOpen] = useState(false);
   const router = useRouter();
 
-  const token = localStorage.getItem("authToken");
   const username: any = localStorage.getItem("username");
 
   useEffect(() => {
@@ -22,24 +24,14 @@ const Children = ({ gradeList, needLevelList, schoolsList }: any) => {
   const fetchChildren = async () => {
     let response: any;
     try {
+      const token = localStorage.getItem("authToken");
       if (!token) {
         router.push("/login"); // Redirect to login if no token
         return;
       }
 
-      const encodedUsername = encodeURIComponent(username);
-      const response = await fetch(
-        `http://localhost:3000/api/children/${encodedUsername}`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (!response.ok) {
+      const response = await getAllChildren();
+      if (!response?.ok) {
         throw new Error("Failed to fetch");
       }
 
@@ -99,10 +91,10 @@ const Children = ({ gradeList, needLevelList, schoolsList }: any) => {
             <PersonIcon />
             <div className="grid grid-cols-2 text-left gap-y-2">
               <p className="font-bold">Name:</p>
-              <p>{child.firstname + " " + child.lastname}</p>
+              <p>{child.firstName + " " + child.lastName}</p>
 
               <p className="font-bold">DOB:</p>
-              <p>{child.dob}</p>
+              <p>{getFormattedDate(child.dob)}</p>
 
               <p className="font-bold">Grade:</p>
               <p>{child.grade}</p>

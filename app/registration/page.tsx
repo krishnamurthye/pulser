@@ -49,6 +49,7 @@ const Registration = () => {
           email: values.email,
           dob: values.dob,
           password: values.password,
+          confirmPassword: values.confirmPassword,
           phoneNumber: values.phoneNumber,
           role: getUserRole(values.userType),
           // nationality: values.nationality,
@@ -90,6 +91,7 @@ const Registration = () => {
           dob: "",
           // nationality: "",
           password: "",
+          confirmPassword: "",
           phoneNumber: "",
           userType: "Parent",
         }}

@@ -3,7 +3,8 @@
 const ChildContactCard = () => {
   // You can replace these placeholder values with actual data from your application state
   const childData = {
-    name: "Ms. Lopez",
+    firstName: "Ms. Lopez",
+    lastName: "Guv",
     school: "DAS",
     grade: "G4",
     language: "English",
@@ -16,7 +17,9 @@ const ChildContactCard = () => {
 
   return (
     <div className="mb-4">
-      <h2 className="text-lg font-semibold mb-2">{childData.name}</h2>
+      <h2 className="text-lg font-semibold mb-2">
+        {childData.firstName + " " + childData.firstName}
+      </h2>
       <p>School: {childData.school}</p>
       <p>Grade: {childData.grade}</p>
       <p>Language: {childData.language}</p>

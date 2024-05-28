@@ -103,7 +103,6 @@ const ChildTable = () => {
       }
       return child;
     });
-    console.log("edited status =====> ", editedStatus);
 
     setChildren(updatedChildren);
     setEditPopupVisible(false);

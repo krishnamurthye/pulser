@@ -9,6 +9,7 @@ import Children from "./children/page";
 import LSARRequestsPage from "./LSA-requests/page";
 import Billing from "./billing/page";
 import Messages from "./messages/page";
+import { getAllChildren } from "../apis/api-calls";
 
 const Dashboard = () => {
   const [activeNavItem, setActiveNavItem] = useState("Children");
@@ -28,18 +29,9 @@ const Dashboard = () => {
         const username: any = localStorage.getItem("username");
         const token: any = localStorage.getItem("authToken");
         const encodedUsername = encodeURIComponent(username);
-        const response = await fetch(
-          `http://localhost:4201/api/children/uiparams/${encodedUsername}`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
-            },
-          }
-        );
+        const response = await getAllChildren();
 
-        if (response.ok) {
+        if (response?.ok) {
           const result = await response.json();
           console.log("Success:", result);
           setGradeList(result.gradeList);

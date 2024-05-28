@@ -2,6 +2,8 @@
 import { useState } from "react";
 import PersonIcon from "../../public/PersonIcon";
 import { toast } from "react-toastify";
+import { buildUrl, parentRoute } from "../utils/api";
+import { getAllChildren } from "../apis/api-calls";
 
 const ChildEditPopup = ({
   onClose,
@@ -34,12 +36,19 @@ const ChildEditPopup = ({
     console.log(formData);
 
     try {
-      const response = await fetch("http://localhost:4201/api/children/add", {
+      const token: any = localStorage.getItem("authToken");
+      const response = await fetch(buildUrl(parentRoute, "add/child"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          dob: formData.dob,
+          school: "ABC School",
+        }),
       });
 
       if (response.ok) {
@@ -236,7 +245,6 @@ const ChildEditPopup = ({
           <button
             type="button"
             onClick={handleSave}
-            disabled={!allFieldsFilled}
             className={`px-4 py-2 rounded-md ${
               allFieldsFilled
                 ? "bg-green-400 text-white"
