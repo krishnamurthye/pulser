@@ -3,7 +3,6 @@ import { useState } from "react";
 import PersonIcon from "../../public/PersonIcon";
 import { toast } from "react-toastify";
 import { buildUrl, parentRoute } from "../utils/api";
-import { getAllChildren } from "../apis/api-calls";
 
 const ChildEditPopup = ({
   onClose,
@@ -156,7 +155,7 @@ const ChildEditPopup = ({
                 className="w-full px-3 py-2 border rounded-md"
               >
                 <option value="">Select School</option>
-                {schoolsList.map((school: any) => (
+                {schoolsList?.map((school: any) => (
                   <option key={school.id} value={school.id}>
                     {school.name}
                   </option>
@@ -176,7 +175,7 @@ const ChildEditPopup = ({
                 className="w-full px-3 py-2 border rounded-md"
               >
                 <option value="">Select Grade</option>
-                {gradeList.map((grade: any) => (
+                {gradeList?.map((grade: any) => (
                   <option key={grade.id} value={grade.id}>
                     {grade.name}
                   </option>
@@ -196,7 +195,7 @@ const ChildEditPopup = ({
                 className="w-full px-3 py-2 border rounded-md"
               >
                 <option value="">Select Need Level</option>
-                {needLevelList.map((needLevel: any) => (
+                {needLevelList?.map((needLevel: any) => (
                   <option key={needLevel.id} value={needLevel.id}>
                     {needLevel.name}
                   </option>

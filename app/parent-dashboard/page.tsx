@@ -33,7 +33,6 @@ const Dashboard = () => {
 
         if (response?.ok) {
           const result = await response.json();
-          console.log("Success:", result);
           setGradeList(result.gradeList);
           setNeedLevelList(result.needLevelList);
           setSchoolsList(result.schoolsList);
