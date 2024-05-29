@@ -1,18 +1,25 @@
 // src/middleware/authMiddleware.js
-const jwt = require('jsonwebtoken');
-const { User, appUser } = require('../models');
+const jwt = require("jsonwebtoken");
+const { User, appUser } = require("../models");
 
 const authenticateToken = async (req, res, next) => {
-  const token = req.headers['authorization'] && req.headers['authorization'].split(' ')[1];
-  if (!token) return res.sendStatus(401);
+  const header = req.headers["authorization"];
+  const token = header && header.split(" ")[1]; // More defensive
+
+  if (!token) {
+    return res.sendStatus(401); // Unauthorized: No token provided
+  }
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.authUser = await appUser.findByPk(decoded.userId);
-    if (!req.authUser) return res.sendStatus(401);
+    req.authUser = await appUser.findByPk(decoded.user.id);
+    if (!req.authUser) {
+      return res.sendStatus(401); // Unauthorized: User not found
+    }
     next();
   } catch (err) {
-    return res.sendStatus(403);
+    console.error("Token verification failed:", err);
+    return res.sendStatus(403); // Forbidden: Token invalid or expired
   }
 };
 
