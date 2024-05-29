@@ -5,6 +5,7 @@ import * as Yup from "yup";
 import { ROLE_MAPPING } from "../utils/constants";
 import { toast } from "react-toastify";
 import { authRoute, buildUrl } from "../utils/api";
+import { useAuth } from "../utils/AuthContext";
 
 const LoginSchema = Yup.object().shape({
   email: Yup.string().email("Invalid email").required("Email is required"),
@@ -13,6 +14,8 @@ const LoginSchema = Yup.object().shape({
 
 const Login = () => {
   const router = useRouter();
+
+  const { login } = useAuth();
 
   const handleSubmit = async (values: any, actions: any) => {
     const { email, password } = values;
@@ -34,8 +37,11 @@ const Login = () => {
 
         // Store the token in localStorage
         localStorage.setItem("authToken", data.token);
-        localStorage.setItem("role", data?.user?.role);
-        localStorage.setItem("username", data?.user?.username);
+        // localStorage.setItem("role", data?.user?.role);
+        // localStorage.setItem("username", data?.user?.username);
+
+        login(data.token);
+
         switch (data?.user?.role) {
           case ROLE_MAPPING.PARENT:
             router.push("/parent-dashboard");
@@ -58,7 +64,11 @@ const Login = () => {
       }
     } catch (error) {
       console.error("Network error:", error);
-      alert("Failed to connect to the server");
+
+      toast.error("Failed to connect to the server", {
+        position: "top-right",
+        className: "custom-toast",
+      });
     }
 
     actions.setSubmitting(false);
