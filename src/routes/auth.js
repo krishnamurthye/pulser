@@ -4,7 +4,7 @@ const express = require('express');
 const { appUser, authentication, sequelize} = require('../models');
 const { loadUserRoles, getUserRoles } = require('../loaders/loadRoles');
 const { hashPassword, comparePassword } = require('../util/passwordUtil');
-const jwt = require('jsonwebtoken');
+const generateToken = require('../middleware/tokenGenerator');
 
 const router = express.Router();
 
@@ -94,7 +94,7 @@ router.post('/login', async (req, res) => {
           return res.status(401).json({ message: 'Invalid credentials' });
       }
       // Generate JWT token
-      const token = jwt.sign({ user: { id: user.id, role: user.role } }, process.env.JWT_SECRET, { expiresIn: '1h' });
+      const token = generateToken(user);
       
       res.json({ token });
   } catch (error) {

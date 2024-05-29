@@ -4,13 +4,7 @@ const { appUser, authentication, sequelize } = require('../src/models');
 // May not required because setup is doing the same
 beforeAll(async () => {
   try{
-    if (!isServerReady()){
-      // console.log(" server is not up , so clearning old data");
-    // Clear users table before running tests
-    // await appUser.destroy({ where: {} });
-    // await authentication.destroy({ where: {} });
-    }
-  
+    
   // Polling mechanism to wait for the server to be ready
   const maxRetries = 30; // Maximum number of retries
   const retryInterval = 1000; // Interval in milliseconds

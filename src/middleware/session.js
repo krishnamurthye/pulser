@@ -11,7 +11,9 @@ const authenticateToken = async (req, res, next) => {
   }
 
   try {
+    console.log("verify the token: "+ token);
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    console.log("decoded: "+ decoded + decoded.user);
     req.authUser = await appUser.findByPk(decoded.user.id);
     if (!req.authUser) {
       return res.sendStatus(401); // Unauthorized: User not found

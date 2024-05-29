@@ -1,6 +1,7 @@
 // controllers/childController.js
 
-const { appUser } = require("../models");
+const { appUser } = require('../models');
+//const {getSchoolLists, getSchoolSystemLists} = require('../loaders/loadSchools');
 
 // Controller function to add a new child under an existing parent
 exports.addChild = async (req, res) => {
