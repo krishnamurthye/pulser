@@ -1,15 +1,11 @@
 "use cleint";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PersonIcon from "../../public/PersonIcon";
 import { toast } from "react-toastify";
-import { buildUrl, parentRoute } from "../utils/api";
+import { buildUrl, parentRoute, valuesRoute } from "../utils/api";
+import { getAuthToken } from "../utils/util-fn";
 
-const ChildEditPopup = ({
-  onClose,
-  gradeList,
-  needLevelList,
-  schoolsList,
-}: any) => {
+const ChildEditPopup = ({ onClose, gradeList, needLevelList }: any) => {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -23,6 +19,8 @@ const ChildEditPopup = ({
     username: localStorage.getItem("username"),
   });
 
+  const [schoolsList, setSchoolsList] = useState([]);
+
   const handleChange = (e: any) => {
     const { name, value, type, checked } = e.target;
     setFormData((prevData) => ({
@@ -31,11 +29,30 @@ const ChildEditPopup = ({
     }));
   };
 
+  useEffect(() => {
+    fetchSchoolSystems();
+  }, []);
+
+  const fetchSchoolSystems = async () => {
+    const response = await fetch(buildUrl(valuesRoute, "/list/schoolsList"), {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${getAuthToken()}`,
+      },
+    });
+
+    if (response.ok) {
+      const result = await response.json();
+      setSchoolsList(result);
+    }
+  };
+
   const handleSave = async () => {
     console.log(formData);
 
     try {
-      const token: any = localStorage.getItem("authToken");
+      const token = getAuthToken();
       const response = await fetch(buildUrl(parentRoute, "add/child"), {
         method: "POST",
         headers: {
