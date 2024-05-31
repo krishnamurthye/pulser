@@ -7,6 +7,8 @@ const schoolSystemModel = require('./schoolSystem');
 const schoolsListModel = require('./schoolsList');
 // const schoolingModel = require('./schooling');
 const lsaRequestModel = require('./lsaRequest');
+const educationModel = require('./education');
+const specializationModel = require('./specialization');
 
 const sequelize = new Sequelize({
   dialect: "mysql",
@@ -25,7 +27,8 @@ const schoolsList = schoolsListModel(sequelize, Sequelize);
 const appUser = appUserModel(sequelize, Sequelize);
 const authentication = authModel(sequelize, Sequelize);
 const lsaRequest=lsaRequestModel(sequelize, Sequelize);
-
+const education=educationModel(sequelize, Sequelize);
+const specialization=specializationModel(sequelize, Sequelize);
 
 
 appUser.hasOne(authentication, { foreignKey: "auth_user_id" });
@@ -50,6 +53,8 @@ sequelize.sync().then(() => {
     schoolsList,
     // schooling,
     lsaRequest,
+    education,
+    specialization,
   };
   
   Object.keys(models).forEach(modelName => {

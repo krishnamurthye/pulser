@@ -1,0 +1,5 @@
+[
+    { "id": 1, "specialization": "Computer Science", "isActive": true },
+    { "id": 2, "specialization": "Engineering", "isActive": true },
+    { "id": 3, "specialization": "Business Administration", "isActive": true }
+]

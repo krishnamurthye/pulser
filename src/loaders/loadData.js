@@ -1,11 +1,11 @@
- // src/loaders/loadData.js
+// src/loaders/loadData.js
 
 const fs = require('fs');
 const path = require('path');
 const { schoolSystem, schoolsList } = require('../models');
 
 let schoolsLists = [];
-let isSchoolsListsInitialized = false;
+let isSchoolsListLoaded = false;
 
 async function loadSchoolsList() {
   const filePath = path.join(__dirname, '../../config/schools-list.json');
@@ -21,7 +21,7 @@ async function loadSchoolsList() {
       }
     });
   }
-  isSchoolsListsInitialized = true;
+  isSchoolsListLoaded = true;
 }
 
 function getSchoolLists() {
@@ -29,18 +29,18 @@ function getSchoolLists() {
 }
 
 function isSchoolsListInitialized() {
-  return isSchoolsListsInitialized;
+  return isSchoolsListLoaded;
 }
 
 
-let schoolSystemLists=[];
-let isSchoolSystemListsInitialized = false;
+let schoolSystemLists = [];
+let isSystemListLoaded = false;
 
 
 async function loadSchoolsSystem() {
   const filePath = path.join(__dirname, '../../config/school-system.json');
   schoolSystemLists = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
- console.log("loadSchoolsSystem:schoolSystemLists", schoolSystemLists);
+  console.log("loadSchoolsSystem:schoolSystemLists", schoolSystemLists);
   for (const ss of schoolSystemLists) {
     await schoolSystem.findOrCreate({
       where: { id: ss.id },
@@ -50,15 +50,22 @@ async function loadSchoolsSystem() {
       }
     });
   }
-  isSchoolSystemListsInitialized=true;
+  isSystemListLoaded = true;
 }
 
 function getSchoolSystemLists() {
   return schoolSystemLists;
 }
 
-function isSchoolSystemListInitialized(){
-  return isSchoolSystemListsInitialized;
+function isSchoolSystemListInitialized() {
+  return isSystemListLoaded;
 }
 
-module.exports = { loadSchoolsList, loadSchoolsSystem, getSchoolLists, getSchoolSystemLists, isSchoolsListInitialized, isSchoolSystemListInitialized };
+module.exports = {
+  loadSchoolsList,
+  loadSchoolsSystem,
+  getSchoolLists,
+  getSchoolSystemLists,
+  isSchoolsListInitialized,
+  isSchoolSystemListInitialized
+};

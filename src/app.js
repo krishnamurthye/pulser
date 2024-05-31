@@ -11,6 +11,10 @@ const valueRoutes = require('./routes/value');
 const { loadSchoolsList, loadSchoolsSystem } = require('./loaders/loadData');
 const { loadUserTypes } = require('./util/loadUserTypes');
 const lsaRequestRoutes = require('./routes/lsaRequest');
+const { loadEducation } = require('./loaders/loadEducation');
+const { loadSpecialization } = require('./loaders/loadSpecialization');
+
+
 const cors = require("cors");
 
 
@@ -56,6 +60,14 @@ const server = app.listen(PORT, async () => {
 
       loadSchoolsSystem();
       console.log('loaded SchoolsSystem');
+
+      console.log('Loading Education');
+      loadEducation();  // Load into memory
+      console.log('Education loaded');
+      
+      console.log('Loading Specialization');
+      loadSpecialization();  // Load into memory
+      console.log('Specialization loaded');
 
       console.log('loaded');
       isServerUp = true;
