@@ -9,6 +9,7 @@ const profileRoutes = require('./routes/profile');
 const parentRoutes = require('./routes/child');
 const valueRoutes = require('./routes/value');
 const { loadSchoolsList, loadSchoolsSystem } = require('./loaders/loadData');
+const lsaRequestRoutes = require('./routes/lsaRequest');
 const cors = require("cors");
 
 
@@ -30,6 +31,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/profile", profileRoutes);
 app.use("/api/parent", parentRoutes);
 app.use("/api/values", valueRoutes);
+app.use('/api/lsaRequest', lsaRequestRoutes);
 
 
 const PORT = process.env.PORT || 3000;
