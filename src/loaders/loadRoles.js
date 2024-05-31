@@ -13,7 +13,7 @@ async function loadUserRoles() {
       await userRole.findOrCreate({
         where: { id: role.id },
         defaults: {
-          roleName: role.roleName,
+          name: role.name,
         }
       });
     }

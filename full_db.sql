@@ -14,7 +14,7 @@ CREATE TABLE `Authentication` (
   `failedAttempts` integer
 );
 
-CREATE TABLE `users` (
+CREATE TABLE `appUsers` (
   `id` integer PRIMARY KEY,
   `firstName` varchar(255),
   `lastName` varchar(255),

@@ -3,6 +3,12 @@ const request = require('supertest');
 const { app, server, isServerReady } = require('../src/app');   
 const { hashPassword, comparePassword } = require('../src/util/passwordUtil');
 
+const parentType=1;
+const lasType=3;
+
+const parentRole=1;
+const lasRole=2;
+
   describe('POST /api/auth/login', () => {
     const email = 'test@example.com'
     const password = '1234567890'
@@ -12,10 +18,11 @@ const { hashPassword, comparePassword } = require('../src/util/passwordUtil');
       const userData = {
         firstName: 'test',
         lastName: 'test',
-        role: 1,
+        role: parentRole,
         phoneNumber: 987654234,
         email: email,
-        password: hash
+        password: hash,
+        userType:parentType
       };
   
       const response = await request(app)

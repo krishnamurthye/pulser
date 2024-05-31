@@ -1,8 +1,7 @@
 [
-    { "id": 1, "roleName": "parent" },
-    { "id": 2, "roleName": "child" },
-    { "id": 3, "roleName": "lsa" },
-    { "id": 4, "roleName": "admin" },
-    { "id": 5, "roleName": "councillor" }
+    { "id": 1, "name": "parent" },
+    { "id": 2, "name": "lsa" },
+    { "id": 3, "name": "admin" },
+    { "id": 4, "name": "councillor" }
 ]
   

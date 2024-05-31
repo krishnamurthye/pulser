@@ -9,6 +9,7 @@ const profileRoutes = require('./routes/profile');
 const parentRoutes = require('./routes/child');
 const valueRoutes = require('./routes/value');
 const { loadSchoolsList, loadSchoolsSystem } = require('./loaders/loadData');
+const { loadUserTypes } = require('./util/loadUserTypes');
 const lsaRequestRoutes = require('./routes/lsaRequest');
 const cors = require("cors");
 
@@ -39,8 +40,12 @@ const server = app.listen(PORT, async () => {
   console.log(`Server running on port ${PORT}`);
 
   try {
-    await sequelize.sync(); // Sync all models
-    console.log("Database & tables created!");
+      await sequelize.sync(); // Sync all models
+      console.log("Database & tables created!");
+
+      console.log('Loading user types');
+      loadUserTypes();  // Load user types into memory
+      console.log('User types loaded');
 
       console.log('load user roles');
       await loadUserRoles();
@@ -54,6 +59,8 @@ const server = app.listen(PORT, async () => {
 
       console.log('loaded');
       isServerUp = true;
+      console.log('************* Server Started *************');
+
     } catch (error) {
       console.error('Unable to sync database:', error);
     }
