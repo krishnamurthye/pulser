@@ -36,7 +36,7 @@ const getUserRole = (userType: any) => {
 const Registration = () => {
   const router = useRouter();
 
-  const handleSubmit = async (values, actions) => {
+  const handleSubmit = async (values: any, actions: any) => {
     try {
       const response = await fetch(buildUrl(authRoute, "register"), {
         method: "POST",
@@ -47,11 +47,12 @@ const Registration = () => {
           firstName: values.firstName,
           lastName: values.lastName,
           email: values.email,
-          dob: values.dob,
+          // dob: values.dob,
           password: values.password,
-          confirmPassword: values.confirmPassword,
+          // confirmPassword: values.confirmPassword,
           phoneNumber: values.phoneNumber,
           role: getUserRole(values.userType),
+          userType: values.userType?.toLowerCase(),
           // nationality: values.nationality,
         }),
       });
