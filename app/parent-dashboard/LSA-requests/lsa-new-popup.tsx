@@ -1,10 +1,14 @@
 "use client";
-import { buildUrl, lsaRoute } from "@/app/utils/api";
+import { buildUrl, lsaRoute, parentRoute } from "@/app/utils/api";
 import { getAuthToken } from "@/app/utils/util-fn";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import * as Yup from "yup";
 import { useFormik } from "formik";
+import {
+  fetchChildrenForParent,
+  fetchSchoolSystems,
+} from "@/app/apis/api-calls";
 
 const validationSchema = Yup.object().shape({
   child: Yup.string().required("Child is required"),
@@ -85,9 +89,27 @@ const NewSLARequest = ({ onClose }: any) => {
     },
   });
 
+  const [children, setChildren] = useState([]);
+  const [schoolSystems, setSchoolSystems] = useState([]);
+
   const handleCancelLSARequest = () => {
     formik.resetForm();
     onClose();
+  };
+
+  useEffect(() => {
+    getChildren();
+    getSchoolSystems();
+  }, []);
+
+  const getChildren = async () => {
+    const result: any = await fetchChildrenForParent();
+    setChildren(result);
+  };
+
+  const getSchoolSystems = async () => {
+    const result: any = await fetchSchoolSystems();
+    setSchoolSystems(result);
   };
 
   return (
@@ -101,8 +123,7 @@ const NewSLARequest = ({ onClose }: any) => {
                 <label htmlFor="child" className="block mb-2">
                   Child Name
                 </label>
-                <input
-                  type="text"
+                <select
                   id="child"
                   name="child"
                   value={formik.values.child}
@@ -113,7 +134,15 @@ const NewSLARequest = ({ onClose }: any) => {
                       ? "border-red-500"
                       : ""
                   }`}
-                />
+                >
+                  <option value="" label="Select child" />
+                  {children?.map((child) => (
+                    <option key={child.id} value={child.id}>
+                      {child.firstName + " " + child.lastName}
+                    </option>
+                  ))}
+                </select>
+
                 {formik.touched.child && formik.errors.child ? (
                   <div className="text-red-500 text-sm mt-1">
                     {formik.errors.child}
@@ -170,8 +199,7 @@ const NewSLARequest = ({ onClose }: any) => {
                 <label htmlFor="school" className="block mb-2">
                   School
                 </label>
-                <input
-                  type="text"
+                <select
                   id="school"
                   name="school"
                   value={formik.values.school}
@@ -182,7 +210,14 @@ const NewSLARequest = ({ onClose }: any) => {
                       ? "border-red-500"
                       : ""
                   }`}
-                />
+                >
+                  <option value="" label="Select school" />
+                  {schoolSystems?.map((school) => (
+                    <option key={school.id} value={school.id}>
+                      {school.name}
+                    </option>
+                  ))}
+                </select>
                 {formik.touched.school && formik.errors.school ? (
                   <div className="text-red-500 text-sm mt-1">
                     {formik.errors.school}

@@ -6,7 +6,7 @@ import ChildTable from "../child-table";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { buildUrl, parentRoute } from "@/app/utils/api";
-import { getAllChildren } from "@/app/apis/api-calls";
+import { fetchChildrenForParent } from "@/app/apis/api-calls";
 import { getFormattedDate } from "@/app/utils/util-fn";
 
 const Children = ({ gradeList, needLevelList, schoolsList }: any) => {
@@ -18,33 +18,40 @@ const Children = ({ gradeList, needLevelList, schoolsList }: any) => {
   const username: any = localStorage.getItem("username");
 
   useEffect(() => {
-    fetchChildren();
-  }, [router, username]);
+    getChildren();
+  }, [username]);
 
-  const fetchChildren = async () => {
-    let response: any;
-    try {
-      const token = localStorage.getItem("authToken");
-      if (!token) {
-        router.push("/login"); // Redirect to login if no token
-        return;
-      }
+  const getChildren = async () => {
+    const response: any = await fetchChildrenForParent();
+    console.log("response children =====> ", response);
 
-      const response = await getAllChildren();
-      if (!response?.ok) {
-        throw new Error("Failed to fetch");
-      }
-
-      const data = await response.json();
-      setChildren(data); // Assuming the API returns the array of children directly
-    } catch (error: any) {
-      console.error("Failed to fetch children:", error);
-      if (error.message === "Failed to fetch" || response.status === 401) {
-        // Unauthorized access or network error
-        router.push("/login");
-      }
-    }
+    setChildren(response);
   };
+
+  // const fetchChildren = async () => {
+  //   let response: any;
+  //   try {
+  //     const token = localStorage.getItem("authToken");
+  //     if (!token) {
+  //       router.push("/login"); // Redirect to login if no token
+  //       return;
+  //     }
+
+  //     const response = await getAllChildren();
+  //     if (!response?.ok) {
+  //       throw new Error("Failed to fetch");
+  //     }
+
+  //     const data = await response.json();
+  //     setChildren(data); // Assuming the API returns the array of children directly
+  //   } catch (error: any) {
+  //     console.error("Failed to fetch children:", error);
+  //     if (error.message === "Failed to fetch" || response.status === 401) {
+  //       // Unauthorized access or network error
+  //       router.push("/login");
+  //     }
+  //   }
+  // };
 
   const handleChildClick = () => {
     setIsChildPopupOpen(true);
@@ -60,7 +67,7 @@ const Children = ({ gradeList, needLevelList, schoolsList }: any) => {
 
   const handleClosePopup = () => {
     setIsPopupOpen(false);
-    fetchChildren(); // Refresh the list after closing the popup
+    fetchChildrenForParent(); // Refresh the list after closing the popup
   };
 
   return (
@@ -82,7 +89,7 @@ const Children = ({ gradeList, needLevelList, schoolsList }: any) => {
         />
       </div>
       <div className="grid grid-cols-3 gap-4">
-        {children.map((child: any) => (
+        {children?.map((child: any) => (
           <div
             key={child.id}
             className="bg-gray-200 p-4 rounded-md cursor-pointer text-center"

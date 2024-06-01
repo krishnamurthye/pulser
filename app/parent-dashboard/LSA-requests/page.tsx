@@ -2,56 +2,19 @@
 import { useEffect, useState } from "react";
 import NewSLARequest from "./lsa-new-popup";
 import { buildUrl, lsaRoute } from "@/app/utils/api";
-import { getAuthToken } from "@/app/utils/util-fn";
+import { getAuthToken, getFormattedDate } from "@/app/utils/util-fn";
+import { fetchLSARequests } from "@/app/apis/api-calls";
 
 const LSARRequestsPage = () => {
   const [lsaRequests, setLSARequests] = useState([]);
-  // const [requests, setRequests] = useState([
-  //   {
-  //     id: "10",
-  //     requestDate: "01/02/2023",
-  //     childName: "James P",
-  //     age: "9",
-  //     grade: "G4",
-  //     need: "English Language Asst",
-  //     startDate: "01/02/2023",
-  //     endDate: "01/02/2024",
-  //     state: "Inactive",
-  //     status: "Completed",
-  //   },
-  //   {
-  //     id: "11",
-  //     requestDate: "01/02/2023",
-  //     childName: "John P",
-  //     age: "12",
-  //     grade: "G7",
-  //     need: "Speech Delay Asst",
-  //     startDate: "01/02/2023",
-  //     endDate: "01/02/2024",
-  //     state: "Active",
-  //     status: "Open",
-  //   },
-  // ]);
 
   useEffect(() => {
-    fetchLSARequests();
+    getLsaRequests();
   }, []);
 
-  const fetchLSARequests = async () => {
-    const response = await fetch(buildUrl(lsaRoute, "/list"), {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${getAuthToken()}`,
-      },
-    });
-
-    if (response.ok) {
-      const result = await response.json();
-      console.log("lsa requests response =====> ", result);
-
-      setLSARequests(result);
-    }
+  const getLsaRequests = async () => {
+    const result: any = await fetchLSARequests();
+    setLSARequests(result);
   };
 
   // State to manage the search query
@@ -65,6 +28,7 @@ const LSARRequestsPage = () => {
 
   const handleClosePopup = () => {
     setShowNewRequestModal(false);
+    getLsaRequests();
   };
 
   // Handler for searching requests
@@ -112,13 +76,15 @@ const LSARRequestsPage = () => {
           </tr>
         </thead>
         <tbody>
-          {lsaRequests?.map((request) => (
+          {lsaRequests?.map((request: any) => (
             <tr key={request.id} onClick={handleRowClick}>
               <td className="border border-gray-400 px-4 py-2">
-                {request.requestDate}
+                {getFormattedDate(request.createdAt)}
               </td>
               <td className="border border-gray-400 px-4 py-2">
-                {request.childName}
+                {request.childDetails.firstName +
+                  " " +
+                  request.childDetails.lastName}
               </td>
               <td className="border border-gray-400 px-4 py-2">
                 {request.age}
@@ -127,13 +93,13 @@ const LSARRequestsPage = () => {
                 {request.grade}
               </td>
               <td className="border border-gray-400 px-4 py-2">
-                {request.need}
+                {request.needs}
               </td>
               <td className="border border-gray-400 px-4 py-2">
-                {request.startDate}
+                {getFormattedDate(request.start_date)}
               </td>
               <td className="border border-gray-400 px-4 py-2">
-                {request.endDate}
+                {getFormattedDate(request.end_date)}
               </td>
               <td className="border border-gray-400 px-4 py-2">
                 {request.state}

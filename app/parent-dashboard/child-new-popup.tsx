@@ -4,6 +4,7 @@ import PersonIcon from "../../public/PersonIcon";
 import { toast } from "react-toastify";
 import { buildUrl, parentRoute, valuesRoute } from "../utils/api";
 import { getAuthToken } from "../utils/util-fn";
+import { fetchSchoolSystems } from "../apis/api-calls";
 
 const ChildEditPopup = ({ onClose, gradeList, needLevelList }: any) => {
   const [formData, setFormData] = useState({
@@ -30,22 +31,12 @@ const ChildEditPopup = ({ onClose, gradeList, needLevelList }: any) => {
   };
 
   useEffect(() => {
-    fetchSchoolSystems();
+    getSchoolSystems();
   }, []);
 
-  const fetchSchoolSystems = async () => {
-    const response = await fetch(buildUrl(valuesRoute, "/list/schoolsList"), {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${getAuthToken()}`,
-      },
-    });
-
-    if (response.ok) {
-      const result = await response.json();
-      setSchoolsList(result);
-    }
+  const getSchoolSystems = async () => {
+    const result: any = await fetchSchoolSystems();
+    setSchoolsList(result);
   };
 
   const handleSave = async () => {

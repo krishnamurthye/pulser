@@ -97,7 +97,7 @@ const ChildTable = () => {
   };
 
   const handleSave = (editedChildId: any) => {
-    const updatedChildren = children.map((child) => {
+    const updatedChildren = children?.map((child) => {
       if (child.id === editedChildId) {
         return { ...child, status: editedStatus };
       }
