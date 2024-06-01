@@ -49,8 +49,6 @@ const ChildEditPopup = ({ onClose, gradeList, needLevelList }: any) => {
   };
 
   const handleSave = async () => {
-    console.log(formData);
-
     try {
       const token = getAuthToken();
       const response = await fetch(buildUrl(parentRoute, "add/child"), {
