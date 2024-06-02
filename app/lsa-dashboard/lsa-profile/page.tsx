@@ -111,7 +111,6 @@ const LSADashboard = () => {
   const handleSubmit = (e: any) => {
     e.preventDefault();
     // Logic to save form data
-    console.log(formData);
   };
 
   return (

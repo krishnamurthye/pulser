@@ -28,31 +28,6 @@ const Children = ({ gradeList, needLevelList, schoolsList }: any) => {
     setChildren(response);
   };
 
-  // const fetchChildren = async () => {
-  //   let response: any;
-  //   try {
-  //     const token = localStorage.getItem("authToken");
-  //     if (!token) {
-  //       router.push("/login"); // Redirect to login if no token
-  //       return;
-  //     }
-
-  //     const response = await getAllChildren();
-  //     if (!response?.ok) {
-  //       throw new Error("Failed to fetch");
-  //     }
-
-  //     const data = await response.json();
-  //     setChildren(data); // Assuming the API returns the array of children directly
-  //   } catch (error: any) {
-  //     console.error("Failed to fetch children:", error);
-  //     if (error.message === "Failed to fetch" || response.status === 401) {
-  //       // Unauthorized access or network error
-  //       router.push("/login");
-  //     }
-  //   }
-  // };
-
   const handleChildClick = () => {
     setIsChildPopupOpen(true);
   };

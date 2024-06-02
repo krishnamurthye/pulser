@@ -9,7 +9,7 @@ import Children from "./children/page";
 import LSARRequestsPage from "./LSA-requests/page";
 import Billing from "./billing/page";
 import Messages from "./messages/page";
-import { getAllChildren } from "../apis/api-calls";
+import { fetchChildrenForParent } from "../apis/api-calls";
 
 const Dashboard = () => {
   const [activeNavItem, setActiveNavItem] = useState("Children");
@@ -29,7 +29,7 @@ const Dashboard = () => {
         const username: any = localStorage.getItem("username");
         const token: any = localStorage.getItem("authToken");
         const encodedUsername = encodeURIComponent(username);
-        const response = await getAllChildren();
+        const response = await fetchChildrenForParent();
 
         if (response?.ok) {
           const result = await response.json();
