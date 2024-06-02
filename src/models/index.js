@@ -7,6 +7,7 @@ const schoolSystemModel = require("./schoolSystem");
 const schoolsListModel = require("./schoolsList");
 // const schoolingModel = require('./schooling');
 const lsaRequestModel = require("./lsaRequest");
+const messageModel = require("./message");
 const educationModel = require("./education");
 const specializationModel = require("./specialization");
 
@@ -27,6 +28,7 @@ const schoolsList = schoolsListModel(sequelize, Sequelize);
 const appUser = appUserModel(sequelize, Sequelize);
 const authentication = authModel(sequelize, Sequelize);
 const lsaRequest = lsaRequestModel(sequelize, Sequelize);
+const messageSQLModel = messageModel(sequelize, Sequelize);
 const education = educationModel(sequelize, Sequelize);
 const specialization = specializationModel(sequelize, Sequelize);
 
@@ -52,6 +54,7 @@ const models = {
   schoolsList,
   // schooling,
   lsaRequest,
+  messageSQLModel,
   education,
   specialization,
 };
