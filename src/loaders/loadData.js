@@ -1,15 +1,15 @@
 // src/loaders/loadData.js
 
-const fs = require('fs');
-const path = require('path');
-const { schoolSystem, schoolsList } = require('../models');
+const fs = require("fs");
+const path = require("path");
+const { schoolSystem, schoolsList } = require("../models");
 
 let schoolsLists = [];
 let isSchoolsListLoaded = false;
 
 async function loadSchoolsList() {
-  const filePath = path.join(__dirname, '../../config/schools-list.json');
-  schoolsLists = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+  const filePath = path.join(__dirname, "../../config/schools-list.json");
+  schoolsLists = JSON.parse(fs.readFileSync(filePath, "utf-8"));
 
   for (const school of schoolsLists) {
     await schoolsList.findOrCreate({
@@ -17,8 +17,8 @@ async function loadSchoolsList() {
       defaults: {
         name: school.name,
         schoolSystem: school.schoolSystem,
-        isActive: school.isActive
-      }
+        isActive: school.isActive,
+      },
     });
   }
   isSchoolsListLoaded = true;
@@ -32,22 +32,19 @@ function isSchoolsListInitialized() {
   return isSchoolsListLoaded;
 }
 
-
 let schoolSystemLists = [];
 let isSystemListLoaded = false;
 
-
 async function loadSchoolsSystem() {
-  const filePath = path.join(__dirname, '../../config/school-system.json');
-  schoolSystemLists = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
-  console.log("loadSchoolsSystem:schoolSystemLists", schoolSystemLists);
+  const filePath = path.join(__dirname, "../../config/school-system.json");
+  schoolSystemLists = JSON.parse(fs.readFileSync(filePath, "utf-8"));
   for (const ss of schoolSystemLists) {
     await schoolSystem.findOrCreate({
       where: { id: ss.id },
       defaults: {
         name: ss.name,
-        isActive: ss.isActive
-      }
+        isActive: ss.isActive,
+      },
     });
   }
   isSystemListLoaded = true;
@@ -67,5 +64,5 @@ module.exports = {
   getSchoolLists,
   getSchoolSystemLists,
   isSchoolsListInitialized,
-  isSchoolSystemListInitialized
+  isSchoolSystemListInitialized,
 };

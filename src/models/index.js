@@ -2,7 +2,7 @@ const Sequelize = require("sequelize");
 const userRoleModel = require("./userRole");
 const appUserModel = require("./appUser");
 const authModel = require("./authentication");
-const addressModel = require("./address");
+// const addressModel = require("./address");
 const schoolSystemModel = require("./schoolSystem");
 const schoolsListModel = require("./schoolsList");
 // const schoolingModel = require('./schooling');
@@ -21,7 +21,7 @@ const sequelize = new Sequelize({
   host: "localhost",
 });
 
-const address = addressModel(sequelize, Sequelize);
+// const address = addressModel(sequelize, Sequelize);
 const userRole = userRoleModel(sequelize, Sequelize);
 const schoolSystem = schoolSystemModel(sequelize, Sequelize);
 const schoolsList = schoolsListModel(sequelize, Sequelize);
@@ -57,7 +57,7 @@ const models = {
   appUser,
   authentication,
   userRole,
-  address,
+  // address,
   schoolSystem,
   schoolsList,
   // schooling,

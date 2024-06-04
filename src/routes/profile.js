@@ -9,8 +9,6 @@ const authenticateToken = require("../middleware/session");
 const upload = require("../middleware/upload");
 const router = express.Router();
 
-// Update user profile
-// router.put('/update', authenticateToken, updateUserProfile);
 router.get("/", authenticateToken, getProfile);
 router.post("/", authenticateToken, upload.single("cv"), updateProfile);
 router.post("/workExperience/add", authenticateToken, addWorkExperience);
