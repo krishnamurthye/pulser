@@ -3,6 +3,7 @@ import { createMessage } from "@/app/apis/api-calls";
 import React, { useState } from "react";
 import * as Yup from "yup";
 import { useFormik } from "formik";
+import { toast } from "react-toastify";
 
 const validationSchema = Yup.object().shape({
   from: Yup.string().required("From is required"),
@@ -36,6 +37,10 @@ const MessageNewPopUp = ({ onClose }: any) => {
         const result = await createMessage(formData);
       } catch (error) {
         console.error("Error sending message:", error);
+        toast.error("Error sending message : " + error?.message, {
+          position: "top-right",
+          className: "custom-toast",
+        });
       }
     },
   });

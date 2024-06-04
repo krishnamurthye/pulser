@@ -10,6 +10,7 @@ import LSARRequestsPage from "./LSA-requests/page";
 import Billing from "./billing/page";
 import Messages from "./messages/page";
 import { fetchChildrenForParent } from "../apis/api-calls";
+import { toast } from "react-toastify";
 
 const Dashboard = () => {
   const [activeNavItem, setActiveNavItem] = useState("Children");
@@ -42,6 +43,10 @@ const Dashboard = () => {
         }
       } catch (error) {
         console.error("Error:", error);
+        toast.error("Failed to fetch child data :" + error?.message, {
+          position: "top-right",
+          className: "custom-toast",
+        });
       }
     };
 

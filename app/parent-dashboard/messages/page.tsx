@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import MessageNewPopUp from "./messagege-new-popup";
 import { fetchMessages } from "@/app/apis/api-calls";
+import { toast } from "react-toastify";
 
 const Messages = () => {
   const [showNewMessagePopup, setShowNewMessagePopup] = useState(false);
@@ -19,6 +20,10 @@ const Messages = () => {
       setMessages(result || []);
     } catch (error) {
       console.error("Failed to fetch messages:", error);
+      toast.error("Failed to fetch messages : " + error?.message, {
+        position: "top-right",
+        className: "custom-toast",
+      });
       setMessages([]);
     } finally {
       setLoading(false);
