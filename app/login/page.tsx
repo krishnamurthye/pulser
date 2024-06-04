@@ -2,7 +2,7 @@
 import { useRouter } from "next/navigation";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { ROLE_MAPPING } from "../utils/constants";
+import { ROLES, ROLE_MAPPING } from "../utils/constants";
 import { toast } from "react-toastify";
 import { authRoute, buildUrl } from "../utils/api";
 import { useAuth } from "../utils/AuthContext";
@@ -16,6 +16,10 @@ const Login = () => {
   const router = useRouter();
 
   const { login } = useAuth();
+
+  const getUserRoleName = (userRoleId: number) => {
+    return ROLES.filter((role) => role.id === userRoleId)[0].name;
+  };
 
   const handleSubmit = async (values: any, actions: any) => {
     const { email, password } = values;
@@ -42,7 +46,9 @@ const Login = () => {
 
         login(data.token);
 
-        switch (data?.user?.role) {
+        const roleName = getUserRoleName(data?.user?.role);
+
+        switch (roleName) {
           case ROLE_MAPPING.PARENT:
             router.push("/parent-dashboard");
             break;

@@ -29,7 +29,7 @@ const RegistrationSchema = Yup.object().shape({
 
 const getUserRole = (userType: any) => {
   return ROLES.find(
-    (role) => role.roleName.toLowerCase() === userType.toLowerCase()
+    (role) => role.name.toLowerCase() === userType.toLowerCase()
   )?.id;
 };
 

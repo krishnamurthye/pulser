@@ -1,9 +1,21 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { fetchLSARequests } from "../apis/api-calls";
 
 const LSAProjects = () => {
   // Sample data for the table, you can replace it with actual data from your application state
+
+  const [lsaRequests, setLSARequests] = useState([]);
+
+  useEffect(() => {
+    getLsaRequests();
+  }, []);
+
+  const getLsaRequests = async () => {
+    const result: any = await fetchLSARequests();
+    setLSARequests(result);
+  };
 
   const [children, setChildren] = useState([
     {
@@ -39,7 +51,7 @@ const LSAProjects = () => {
   };
 
   const sortedChildren = () => {
-    const sortableChildren = [...children];
+    const sortableChildren = [...lsaRequests];
     sortableChildren.sort((a, b) => {
       if (a[sortConfig.key] < b[sortConfig.key]) {
         return sortConfig.direction === "ascending" ? -1 : 1;

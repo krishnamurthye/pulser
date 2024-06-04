@@ -3,6 +3,7 @@ import {
   lsaRoute,
   messageRoute,
   parentRoute,
+  profileRoute,
   valuesRoute,
 } from "../utils/api";
 import { getAuthToken } from "../utils/util-fn";
@@ -82,6 +83,48 @@ export const createMessage = async (messageReq: FormData) => {
       Authorization: `Bearer ${getAuthToken()}`,
     },
     body: messageReq,
+  });
+
+  return response;
+};
+
+export const fetchProfile = async () => {
+  const response = await fetch(buildUrl(profileRoute, "/"), {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${getAuthToken()}`,
+    },
+  });
+
+  if (response.ok) {
+    const result = await response.json();
+    return result;
+  } else {
+    return [];
+  }
+};
+
+export const updateProfile = async (messageReq: FormData) => {
+  const response = await fetch(buildUrl(profileRoute, "/"), {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${getAuthToken()}`,
+    },
+    body: messageReq,
+  });
+
+  return response;
+};
+
+export const addWorkExperience = async (messageReq: any) => {
+  const response = await fetch(buildUrl(profileRoute, "/workExperience/add"), {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${getAuthToken()}`,
+    },
+    body: JSON.stringify(messageReq),
   });
 
   return response;

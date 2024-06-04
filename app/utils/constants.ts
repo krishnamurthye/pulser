@@ -1,14 +1,21 @@
 export const ROLE_MAPPING = {
-  COUNCILLOR: "Councillor",
-  PARENT: "Parent",
-  LSA: "LSA",
+  COUNCILLOR: "councillor",
+  PARENT: "parent",
+  LSA: "lsa",
 };
 export const AUTH_TOKEN = "authToken";
 
+export const USER_TYPES = [
+  { id: 1, name: "parent" },
+  { id: 2, name: "child" },
+  { id: 3, name: "lsa" },
+  { id: 4, name: "admin" },
+  { id: 5, name: "councillor" },
+];
+
 export const ROLES = [
-  { id: 1, roleName: "parent" },
-  { id: 2, roleName: "child" },
-  { id: 3, roleName: "lsa" },
-  { id: 4, roleName: "admin" },
-  { id: 5, roleName: "councillor" },
+  { id: 1, name: "parent" },
+  { id: 2, name: "lsa" },
+  { id: 3, name: "admin" },
+  { id: 4, name: "councillor" },
 ];
