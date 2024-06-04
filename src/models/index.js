@@ -10,6 +10,8 @@ const lsaRequestModel = require("./lsaRequest");
 const messageModel = require("./message");
 const educationModel = require("./education");
 const specializationModel = require("./specialization");
+const profileModel = require("./profile");
+const workExperienceModel = require("./workExperience");
 
 const sequelize = new Sequelize({
   dialect: "mysql",
@@ -31,10 +33,16 @@ const lsaRequest = lsaRequestModel(sequelize, Sequelize);
 const messageSQLModel = messageModel(sequelize, Sequelize);
 const education = educationModel(sequelize, Sequelize);
 const specialization = specializationModel(sequelize, Sequelize);
+const profileSQLModel = profileModel(sequelize, Sequelize);
+const workExperienceSQLModel = workExperienceModel(sequelize, Sequelize);
 
 appUser.hasOne(authentication, { foreignKey: "auth_user_id" });
 authentication.belongsTo(appUser, { foreignKey: "auth_user_id" });
 lsaRequest.hasOne(appUser, { foreignKey: "child" });
+appUser.hasMany(workExperienceSQLModel, {
+  foreignKey: "appUserId",
+  as: "workExperiences",
+});
 // appUser.belongsTo(userRole, { foreignKey: 'role' });
 
 // appUser.associate = (models) => {
@@ -57,6 +65,8 @@ const models = {
   messageSQLModel,
   education,
   specialization,
+  profileSQLModel,
+  workExperienceSQLModel,
 };
 
 Object.keys(models).forEach((modelName) => {

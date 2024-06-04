@@ -113,6 +113,7 @@ app.use("/api/parent", parentRoutes);
 app.use("/api/values", valueRoutes);
 app.use("/api/lsaRequest", lsaRequestRoutes);
 app.use("/api/messages", messageRoutes);
+app.use("/api/profile", profileRoutes);
 
 const PORT = process.env.PORT || 3000;
 const server = app.listen(PORT, async () => {
