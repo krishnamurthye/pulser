@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import ChildEditPopup from "./child-new-popup";
+import AddChildPopup from "./child-new-popup";
 import ChildContactCard from "./child-contact-card";
 import ChildTable from "./child-table";
 import PersonIcon from "@/public/PersonIcon";
@@ -12,7 +12,7 @@ import Messages from "./messages/page";
 import { fetchChildrenForParent } from "../apis/api-calls";
 import { toast } from "react-toastify";
 
-const Dashboard = () => {
+const ParentDashboard = () => {
   const [activeNavItem, setActiveNavItem] = useState("Children");
   const [searchQuery, setSearchQuery] = useState("");
   const [gradeList, setGradeList] = useState([]);
@@ -32,11 +32,11 @@ const Dashboard = () => {
         const encodedUsername = encodeURIComponent(username);
         const response = await fetchChildrenForParent();
 
-        if (response?.ok) {
-          const result = await response.json();
-          setGradeList(result.gradeList);
-          setNeedLevelList(result.needLevelList);
-          setSchoolsList(result.schoolsList);
+        if (response?.length) {
+          // const result = await response.json();
+          // setGradeList(result.gradeList);
+          // setNeedLevelList(result.needLevelList);
+          // setSchoolsList(result.schoolsList);
           // Handle any follow-up tasks
         } else {
           throw new Error("Failed to fetch child data");
@@ -50,7 +50,7 @@ const Dashboard = () => {
       }
     };
 
-    fetchData();
+    // fetchData();
   }, []);
 
   return (
@@ -124,4 +124,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default ParentDashboard;

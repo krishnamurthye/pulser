@@ -229,7 +229,7 @@ const NewSLARequest = ({ onClose }: any) => {
                   Needs
                 </label>
                 <input
-                  type="text"
+                  type="number"
                   id="needs"
                   name="needs"
                   value={formik.values.needs}
@@ -300,7 +300,7 @@ const NewSLARequest = ({ onClose }: any) => {
                   LSA Type
                 </label>
                 <input
-                  type="text"
+                  type="number"
                   id="lsaType"
                   name="lsaType"
                   value={formik.values.lsaType}

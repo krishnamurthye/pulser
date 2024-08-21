@@ -1,6 +1,6 @@
 "use client";
 import PersonIcon from "@/public/PersonIcon";
-import ChildEditPopup from "../child-new-popup";
+import AddChildPopup from "../child-new-popup";
 import ChildContactCard from "../child-contact-card";
 import ChildTable from "../child-table";
 import { useEffect, useState } from "react";
@@ -11,8 +11,9 @@ import { getFormattedDate } from "@/app/utils/util-fn";
 
 const Children = ({ gradeList, needLevelList, schoolsList }: any) => {
   const [children, setChildren] = useState([]);
-  const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [isChildPopupOpen, setIsChildPopupOpen] = useState(false);
+  const [isAddChildPopupOpen, setIsAddChildPopupOpen] = useState(false);
+  const [isEditChildPopupOpen, setIsEditChildPopupOpen] = useState(false);
+  const [selectedChild, setSelectedChild] = useState();
   const router = useRouter();
 
   const username: any = localStorage.getItem("username");
@@ -23,26 +24,25 @@ const Children = ({ gradeList, needLevelList, schoolsList }: any) => {
 
   const getChildren = async () => {
     const response: any = await fetchChildrenForParent();
-    console.log("response children =====> ", response);
-
     setChildren(response);
   };
 
-  const handleChildClick = () => {
-    setIsChildPopupOpen(true);
+  const handleEditChildClick = (child: any) => {
+    setIsEditChildPopupOpen(true);
+    setSelectedChild(child);
   };
 
   const handleCloseChildPopup = () => {
-    setIsChildPopupOpen(false);
+    setIsEditChildPopupOpen(false);
   };
 
   const handleAddChildClick = () => {
-    setIsPopupOpen(true);
+    setIsAddChildPopupOpen(true);
   };
 
-  const handleClosePopup = () => {
-    setIsPopupOpen(false);
-    fetchChildrenForParent(); // Refresh the list after closing the popup
+  const handleClosePopup = async () => {
+    setIsAddChildPopupOpen(false);
+    await getChildren(); // Refresh the list after closing the popup
   };
 
   return (
@@ -68,7 +68,7 @@ const Children = ({ gradeList, needLevelList, schoolsList }: any) => {
           <div
             key={child.id}
             className="bg-gray-200 p-4 rounded-md cursor-pointer text-center"
-            onClick={handleChildClick}
+            onClick={() => handleEditChildClick(child)}
           >
             <PersonIcon />
             <div className="grid grid-cols-2 text-left gap-y-2">
@@ -90,19 +90,19 @@ const Children = ({ gradeList, needLevelList, schoolsList }: any) => {
           </div>
         ))}
       </div>
-      {isPopupOpen && (
-        <ChildEditPopup
+      {isAddChildPopupOpen && (
+        <AddChildPopup
           onClose={handleClosePopup}
           gradeList={gradeList}
           needLevelList={needLevelList}
           schoolsList={schoolsList}
         />
       )}
-      {isChildPopupOpen && (
+      {isEditChildPopupOpen && (
         <div className="fixed top-0 left-0 w-full h-full bg-gray-800 bg-opacity-50 flex justify-center items-center">
           <div className="bg-white p-8 rounded-lg w-full max-w-screen-lg overflow-y-auto">
-            <ChildContactCard />
-            <ChildTable />
+            <ChildContactCard child={selectedChild} />
+            <ChildTable child={selectedChild} />
             <button
               onClick={handleCloseChildPopup}
               className="bg-gray-300 text-gray-800 px-4 py-2 rounded-md mt-4"

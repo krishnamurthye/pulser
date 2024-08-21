@@ -1,5 +1,3 @@
-// utils/AuthContext.tsx
-
 import React, {
   createContext,
   useContext,

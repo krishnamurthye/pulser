@@ -37,9 +37,7 @@ const LSARRequestsPage = () => {
     // Logic for filtering requests based on search query
   };
 
-  const handleRowClick = (child: any) => {
-    console.log("row clicked =====> ", child);
-  };
+  const handleRowClick = (child: any) => {};
 
   return (
     <div>

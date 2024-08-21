@@ -1,6 +1,6 @@
 "use client";
 
-const ChildContactCard = () => {
+const ChildContactCard = ({ child }: any) => {
   // You can replace these placeholder values with actual data from your application state
   const childData = {
     firstName: "Ms. Lopez",
@@ -18,16 +18,16 @@ const ChildContactCard = () => {
   return (
     <div className="mb-4">
       <h2 className="text-lg font-semibold mb-2">
-        {childData.firstName + " " + childData.firstName}
+        {child.firstName + " " + child.lastName}
       </h2>
-      <p>School: {childData.school}</p>
-      <p>Grade: {childData.grade}</p>
-      <p>Language: {childData.language}</p>
-      <p>Start Date: {childData.startDate}</p>
-      <p>End Date: {childData.endDate}</p>
-      <p>Status: {childData.status}</p>
-      <p>Progress: {childData.progress}</p>
-      <p>Rating: {childData.rating}</p>
+      <p>School: {child.school}</p>
+      <p>Grade: {child.grade}</p>
+      <p>Language: {child.language}</p>
+      <p>Start Date: {child.startDate}</p>
+      <p>End Date: {child.endDate}</p>
+      <p>Status: {child.status}</p>
+      <p>Progress: {child.progress}</p>
+      <p>Rating: {child.rating}</p>
     </div>
   );
 };

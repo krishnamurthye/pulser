@@ -2,23 +2,10 @@
 
 import { useState } from "react";
 
-const ChildTable = () => {
+const ChildTable = ({ child }: any) => {
   // Sample data for the table, you can replace it with actual data from your application state
 
-  const [children, setChildren] = useState([
-    {
-      id: 1,
-      lsa: "LSA",
-      school: "DAS",
-      grade: "G4",
-      need: "English Language",
-      startDate: "29/08/2023",
-      endDate: "30/06/2024",
-      state: "Active",
-      status: "In Progress",
-      rating: "4.5",
-    },
-  ]);
+  const [children, setChildren] = useState([child]);
   const [editPopupVisible, setEditPopupVisible] = useState(false);
   const [popupPosition, setPopupPosition] = useState({ x: 0, y: 0 });
   const [selectedChild, setSelectedChild] = useState(null);
@@ -61,18 +48,6 @@ const ChildTable = () => {
   };
 
   const handleRowClick = () => {};
-  // const handleEditClick = (childId: any, event: any) => {
-  //   // Show the edit popup and initialize the edited status with the current status
-  //   setEditPopupVisible(true);
-  //   const child = children.find((child) => child.id === childId);
-  //   setEditedStatus(child?.status);
-
-  //   const rect = event.target.getBoundingClientRect();
-  //   setButtonPosition({
-  //     top: rect.top + window.scrollY,
-  //     left: rect.left + window.scrollX,
-  //   });
-  // };
 
   const handleEditClick = (child: any, event: any) => {
     const element = event.currentTarget; // The clicked table row element

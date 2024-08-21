@@ -6,7 +6,7 @@ import { buildUrl, parentRoute, valuesRoute } from "../utils/api";
 import { getAuthToken } from "../utils/util-fn";
 import { fetchSchoolSystems } from "../apis/api-calls";
 
-const ChildEditPopup = ({ onClose, gradeList, needLevelList }: any) => {
+const AddChildPopup = ({ onClose, gradeList, needLevelList }: any) => {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -264,4 +264,4 @@ const ChildEditPopup = ({ onClose, gradeList, needLevelList }: any) => {
   );
 };
 
-export default ChildEditPopup;
+export default AddChildPopup;

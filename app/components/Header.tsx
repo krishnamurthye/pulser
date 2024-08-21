@@ -8,8 +8,8 @@ const Header: React.FC = () => {
   const { isLoggedIn, logout } = useAuth();
 
   const handleLogout = () => {
-    logout();
     router.push("/login");
+    logout();
   };
 
   return (
@@ -55,7 +55,7 @@ const Header: React.FC = () => {
       </div>
       <ToastContainer
         position="bottom-right"
-        autoClose={12000}
+        autoClose={5000}
         hideProgressBar={false}
         newestOnTop={true}
         closeOnClick
