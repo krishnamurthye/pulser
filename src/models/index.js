@@ -17,7 +17,7 @@ const sequelize = new Sequelize({
   dialect: "mysql",
   database: "pulserdb",
   username: "root",
-  password: "Kri@12345",
+  password: "password",
   host: "localhost",
 });
 

@@ -40,7 +40,8 @@ router.post("/register", async (req, res) => {
 
     let userTypeFromConfig = "";
     try {
-      const userTypeName = getUserTypeByName(userType);
+      console.log("userType", userType);
+      const userTypeName = getUserTypeById(userType);
       const userTypeId = parseInt(userTypeName.id); // Convert role to an integer
 
       userTypeFromConfig = getUserTypeById(userTypeId);

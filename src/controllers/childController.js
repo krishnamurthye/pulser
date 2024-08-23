@@ -81,7 +81,7 @@ exports.getChild = async (req, res) => {
   try {
     // Parse request body
     const authUserId = req.authUser.id;
-    const childId = req.childId;
+    const childId = req.params.childId;
 
     // Find the parent in the database
     const parent = await appUser.findByPk(authUserId);

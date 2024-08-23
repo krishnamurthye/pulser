@@ -4,24 +4,35 @@ const path = require("path");
 let userTypes = [];
 
 function loadUserTypes() {
-  const filePath = path.join(__dirname, "../../config/userTypes.json");
-  const data = JSON.parse(fs.readFileSync(filePath, "utf-8"));
-  this.userTypes = data;
+  // Check if userTypes is already loaded
+  if (userTypes.length === 0) {
+    const filePath = path.join(__dirname, "../../config/userTypes.json");
+    try {
+      const data = JSON.parse(fs.readFileSync(filePath, "utf-8"));
+      userTypes = data; // Assign data to userTypes
+      console.log("User types loaded successfully.");
+    } catch (error) {
+      console.error("Error loading userTypes.json:", error);
+    }
+  } else {
+    console.log("User types already loaded.");
+  }
 }
 
+
 function getUserTypes() {
-  return this.userTypes;
+  return userTypes;
 }
 
 function getUserTypeById(id) {
-  return this.userTypes.find(
+  return userTypes.find(
     (userType) => userType.id === id || userType.name === id
   );
 }
 
 function getUserTypeByName(name) {
   loadUserTypes();
-  return this.userTypes.find((userType) => userType.name === name);
+  return userTypes.find((userType) => userType.name === name);
 }
 
 module.exports = {
