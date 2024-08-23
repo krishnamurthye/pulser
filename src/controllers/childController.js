@@ -77,10 +77,11 @@ exports.listChild = async (req, res) => {
 };
 
 // Controller function to get existing children for a parent
-exports.listChild = async (req, res) => {
+exports.getChild = async (req, res) => {
   try {
     // Parse request body
     const authUserId = req.authUser.id;
+    const childId = req.childId;
 
     // Find the parent in the database
     const parent = await appUser.findByPk(authUserId);
@@ -97,6 +98,7 @@ exports.listChild = async (req, res) => {
       where: {
         parentId: parent.id,
         userType: 2, // Assuming userType 2 is for children
+        id:childId
       },
       attributes: ["id", "firstName", "lastName", "dob", "email"],
     });

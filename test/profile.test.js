@@ -79,4 +79,44 @@ describe('Authentication Middleware', () => {
     expect(response.body[1]).toHaveProperty('firstName', 'Child');
     expect(response.body[1]).toHaveProperty('lastName', 'User2');
   });
+
+  it('should return requested children for a given childId', async () => {
+    // await appUser.create({
+     
+    //   firstName: 'Child',
+    //   lastName: 'User2',
+    //   role: 2,
+    //   userType: 2,
+    //   parentId: 1,
+    //   dob: '2005-01-01',
+    //   isActive: true
+    // });
+
+    
+    // const response = await request(app)
+    //   .get('/api/parent/lisgett/child')
+    //   .set('Authorization', `Bearer ${token}`);
+
+    // expect(response.status).toBe(200);
+    // expect(response.body).toHaveLength(2);
+    // expect(response.body[0]).toHaveProperty('id', 2);
+    // expect(response.body[0]).toHaveProperty('firstName', 'Child');
+    // expect(response.body[0]).toHaveProperty('lastName', 'User1');
+
+    // expect(response.body[1]).toHaveProperty('id', 3);
+    // expect(response.body[1]).toHaveProperty('firstName', 'Child');
+    // expect(response.body[1]).toHaveProperty('lastName', 'User2');
+
+
+    const response = await request(app)
+      .get('/api/parent/get/child/2')
+      .set('Authorization', `Bearer ${token}`);
+
+
+    expect(response.status).toBe(200);   
+    expect(response.body[0]).toHaveProperty('id', 2);
+    expect(response.body[0]).toHaveProperty('firstName', 'Child');
+    expect(response.body[0]).toHaveProperty('lastName', 'User1');
+
+  });
 });
