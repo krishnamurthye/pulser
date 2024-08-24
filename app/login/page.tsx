@@ -14,7 +14,6 @@ const LoginSchema = Yup.object().shape({
 
 const Login = () => {
   const router = useRouter();
-
   const { login } = useAuth();
 
   const getUserRoleName = (userRoleId: number) => {
@@ -41,8 +40,6 @@ const Login = () => {
 
         // Store the token in localStorage
         localStorage.setItem("authToken", data.token);
-        // localStorage.setItem("role", data?.user?.role);
-        // localStorage.setItem("username", data?.user?.username);
 
         login(data.token);
 
@@ -50,9 +47,6 @@ const Login = () => {
 
         switch (roleName) {
           case ROLE_MAPPING.PARENT:
-            router.push("/parent-dashboard");
-            break;
-          case ROLE_MAPPING.COUNCILLOR:
             router.push("/parent-dashboard");
             break;
           case ROLE_MAPPING.LSA:
@@ -78,6 +72,10 @@ const Login = () => {
     }
 
     actions.setSubmitting(false);
+  };
+
+  const handleForgotPassword = () => {
+    router.push("/forgot-password" as const);
   };
 
   return (
@@ -129,6 +127,15 @@ const Login = () => {
             >
               {isSubmitting ? "Logging in..." : "Login"}
             </button>
+            <div className="mt-4 text-center">
+              <button
+                type="button"
+                onClick={handleForgotPassword}
+                className="text-blue-500 hover:underline"
+              >
+                Forgot Password?
+              </button>
+            </div>
           </Form>
         )}
       </Formik>

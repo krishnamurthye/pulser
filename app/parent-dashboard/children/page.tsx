@@ -97,28 +97,21 @@ const Children = ({ gradeList, needLevelList, schoolsList }: any) => {
               <p className="text-gray-600">{getFormattedDate(child.dob)}</p>
 
               <p className="font-semibold text-gray-700">Grade:</p>
-              <p className="text-gray-600">{child.grade}</p>
+              <p className="text-gray-600">{child?.schooling[0]?.grade}</p>
 
               <p className="font-semibold text-gray-700">Level:</p>
-              <p className="text-gray-600">{child.needLevel}</p>
+              <p className="text-gray-600">{child?.schooling[0]?.needLevel}</p>
 
               <p className="font-semibold text-gray-700">Status:</p>
               <p className="text-gray-600">
-                {child.isActive ? "Active" : "Inactive"}
+                {child.schooling[0]?.status ? "Active" : "Inactive"}
               </p>
             </div>
           </div>
         ))}
       </div>
 
-      {isAddChildPopupOpen && (
-        <AddChildPopup
-          onClose={handleClosePopup}
-          gradeList={gradeList}
-          needLevelList={needLevelList}
-          schoolsList={schoolsList}
-        />
-      )}
+      {isAddChildPopupOpen && <AddChildPopup onClose={handleClosePopup} />}
       {isEditChildPopupOpen && (
         <div className="fixed top-0 left-0 w-full h-full bg-gray-800 bg-opacity-50 flex justify-center items-center">
           <div className="bg-white p-8 rounded-lg w-full max-w-screen-lg overflow-y-auto">

@@ -76,6 +76,40 @@ export const fetchSchoolSystems = async () => {
   }
 };
 
+export const fetchGrades = async () => {
+  const response = await fetch(buildUrl(valuesRoute, "/list/gradesList"), {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${getAuthToken()}`,
+    },
+  });
+
+  if (response.ok) {
+    const result = await response.json();
+    return result;
+  } else {
+    return [];
+  }
+};
+
+export const fetchNeedLevels = async () => {
+  const response = await fetch(buildUrl(valuesRoute, "/list/needLevelList"), {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${getAuthToken()}`,
+    },
+  });
+
+  if (response.ok) {
+    const result = await response.json();
+    return result;
+  } else {
+    return [];
+  }
+};
+
 export const fetchMessages = async () => {
   const response = await fetch(buildUrl(messageRoute, "/list/messages"), {
     method: "GET",

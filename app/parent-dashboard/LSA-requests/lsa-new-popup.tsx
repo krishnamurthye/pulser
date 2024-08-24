@@ -20,7 +20,6 @@ const validationSchema = Yup.object().shape({
   needs: Yup.string().required("Needs are required"),
   start_date: Yup.date().required("Start date is required"),
   end_date: Yup.date().required("End date is required"),
-  lsaType: Yup.string().required("LSA Type is required"),
   experience: Yup.string().required("Experience is required"),
   comments: Yup.string().required("Comments are required"),
 });
@@ -35,7 +34,6 @@ const NewSLARequest = ({ onClose }: any) => {
       needs: "",
       start_date: "",
       end_date: "",
-      lsaType: "",
       experience: "",
       comments: "",
       active: false,
@@ -50,7 +48,6 @@ const NewSLARequest = ({ onClose }: any) => {
         needs: values.needs,
         start_date: values.start_date,
         end_date: values.end_date,
-        lsaType: values.lsaType,
         experience: values.experience,
         comments: values.comments,
       };
@@ -115,7 +112,7 @@ const NewSLARequest = ({ onClose }: any) => {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-800 bg-opacity-75 fixed inset-0 z-50">
       <div className="bg-white p-6 rounded shadow-md w-150">
-        <h2 className="text-lg font-bold mb-4">New SLA Request</h2>
+        <h2 className="text-lg font-bold mb-4">New LSA Request</h2>
         <form onSubmit={formik.handleSubmit}>
           <div className="grid grid-cols-2 gap-4">
             <div>
@@ -295,7 +292,7 @@ const NewSLARequest = ({ onClose }: any) => {
                   </div>
                 ) : null}
               </div>
-              <div className="mb-4">
+              {/* <div className="mb-4">
                 <label htmlFor="lsaType" className="block mb-2">
                   LSA Type
                 </label>
@@ -317,7 +314,7 @@ const NewSLARequest = ({ onClose }: any) => {
                     {formik.errors.lsaType}
                   </div>
                 ) : null}
-              </div>
+              </div> */}
               <div className="mb-4">
                 <label htmlFor="experience" className="block mb-2">
                   Experience

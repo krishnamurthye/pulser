@@ -1,12 +1,15 @@
-"use cleint";
+"use client";
 import { useEffect, useState } from "react";
-import PersonIcon from "../../public/PersonIcon";
 import { toast } from "react-toastify";
-import { buildUrl, parentRoute, valuesRoute } from "../utils/api";
+import { buildUrl, parentRoute } from "../utils/api";
 import { getAuthToken } from "../utils/util-fn";
-import { fetchSchoolSystems } from "../apis/api-calls";
+import {
+  fetchGrades,
+  fetchNeedLevels,
+  fetchSchoolSystems,
+} from "../apis/api-calls";
 
-const AddChildPopup = ({ onClose, gradeList, needLevelList }: any) => {
+const AddChildPopup = ({ onClose }: any) => {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -21,6 +24,8 @@ const AddChildPopup = ({ onClose, gradeList, needLevelList }: any) => {
   });
 
   const [schoolsList, setSchoolsList] = useState([]);
+  const [gradesList, setGradessList] = useState([]);
+  const [needsList, setNeedsList] = useState([]);
 
   const handleChange = (e: any) => {
     const { name, value, type, checked } = e.target;
@@ -32,14 +37,28 @@ const AddChildPopup = ({ onClose, gradeList, needLevelList }: any) => {
 
   useEffect(() => {
     getSchoolSystems();
+    getGrades();
+    getNeedLevels();
   }, []);
 
   const getSchoolSystems = async () => {
-    const result: any = await fetchSchoolSystems();
-    setSchoolsList(result);
+    const schoolsList: any = await fetchSchoolSystems();
+    setSchoolsList(schoolsList);
+  };
+
+  const getGrades = async () => {
+    const grades: any = await fetchGrades();
+    setGradessList(grades);
+  };
+
+  const getNeedLevels = async () => {
+    const needsList: any = await fetchNeedLevels();
+    setNeedsList(needsList);
   };
 
   const handleSave = async () => {
+    console.log(JSON.stringify(formData));
+
     try {
       const token = getAuthToken();
       const response = await fetch(buildUrl(parentRoute, "add/child"), {
@@ -48,12 +67,7 @@ const AddChildPopup = ({ onClose, gradeList, needLevelList }: any) => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({
-          firstName: formData.firstName,
-          lastName: formData.lastName,
-          dob: formData.dob,
-          school: "ABC School",
-        }),
+        body: JSON.stringify(formData), // Sending all formData fields
       });
 
       if (response.ok) {
@@ -180,7 +194,7 @@ const AddChildPopup = ({ onClose, gradeList, needLevelList }: any) => {
                 className="w-full px-3 py-2 border rounded-md"
               >
                 <option value="">Select Grade</option>
-                {gradeList?.map((grade: any) => (
+                {gradesList?.map((grade: any) => (
                   <option key={grade.id} value={grade.id}>
                     {grade.name}
                   </option>
@@ -200,7 +214,7 @@ const AddChildPopup = ({ onClose, gradeList, needLevelList }: any) => {
                 className="w-full px-3 py-2 border rounded-md"
               >
                 <option value="">Select Need Level</option>
-                {needLevelList?.map((needLevel: any) => (
+                {needsList?.map((needLevel: any) => (
                   <option key={needLevel.id} value={needLevel.id}>
                     {needLevel.name}
                   </option>

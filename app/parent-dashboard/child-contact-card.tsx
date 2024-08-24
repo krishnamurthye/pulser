@@ -1,33 +1,17 @@
 "use client";
 
-const ChildContactCard = ({ child }: any) => {
-  // You can replace these placeholder values with actual data from your application state
-  const childData = {
-    firstName: "Ms. Lopez",
-    lastName: "Guv",
-    school: "DAS",
-    grade: "G4",
-    language: "English",
-    startDate: "29/08/2023",
-    endDate: "30/06/2024",
-    status: "Active",
-    progress: "In Progress",
-    rating: "4.5",
-  };
+import { getFormattedDate } from "../utils/util-fn";
 
+const ChildContactCard = ({ child }: any) => {
   return (
     <div className="mb-4">
       <h2 className="text-lg font-semibold mb-2">
         {child.firstName + " " + child.lastName}
       </h2>
-      <p>School: {child.school}</p>
-      <p>Grade: {child.grade}</p>
-      <p>Language: {child.language}</p>
-      <p>Start Date: {child.startDate}</p>
-      <p>End Date: {child.endDate}</p>
-      <p>Status: {child.status}</p>
-      <p>Progress: {child.progress}</p>
-      <p>Rating: {child.rating}</p>
+      <p>Grade: {child?.schooling[0]?.grade}</p>
+      <p>Start Date: {getFormattedDate(child?.lsaRequests[0]?.start_date)}</p>
+      <p>End Date: {getFormattedDate(child?.lsaRequests[0]?.end_date)}</p>
+      <p>Status: {child?.schooling[0]?.status}</p>
     </div>
   );
 };

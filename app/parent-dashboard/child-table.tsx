@@ -1,32 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { fetchChildById } from "../apis/api-calls";
+import { memo, useState } from "react";
+import { getFormattedDate } from "../utils/util-fn";
 
-const ChildTable = ({ child }: any) => {
-  // Sample data for the table, you can replace it with actual data from your application state
-
+const ChildTable = memo(({ child }: any) => {
   const [children, setChildren] = useState([child]);
-  const [editPopupVisible, setEditPopupVisible] = useState(false);
-  const [popupPosition, setPopupPosition] = useState({ x: 0, y: 0 });
-  const [selectedChild, setSelectedChild] = useState(null);
-  // State to manage the edited child's status
-  const [editedStatus, setEditedStatus] = useState("");
-  const [buttonPosition, setButtonPosition] = useState({ top: 0, left: 0 });
 
   const [sortConfig, setSortConfig] = useState({
     key: null,
     direction: "ascending",
   });
-
-  useEffect(() => {
-    getChildInfo();
-  }, [child]);
-
-  const getChildInfo = async () => {
-    const response: any = await fetchChildById(child.id);
-    setChildren(response);
-  };
 
   const sortBy = (key: any) => {
     let direction = "ascending";
@@ -59,52 +42,11 @@ const ChildTable = ({ child }: any) => {
 
   const handleRowClick = () => {};
 
-  const handleEditClick = (child: any, event: any) => {
-    const element = event.currentTarget; // The clicked table row element
-    const rect = element.getBoundingClientRect(); // Get position relative to viewport
-    // Set position for the popup (you may need to adjust the values to fit your needs)
-    setPopupPosition({
-      x: rect.left + window.scrollX,
-      y: rect.top + window.scrollY + rect.height, // Adjust as needed
-    });
-    setSelectedChild(child); // Set the selected child state
-    setEditPopupVisible(true); // Show the popup
-  };
-
-  // This function will be called to close the popup
-  const handleClosePopup = () => {
-    setEditPopupVisible(false);
-  };
-
-  const handleStatusChange = (event: any) => {
-    // Update the edited status when the user selects a new status from the dropdown
-    setEditedStatus(event.target.value);
-  };
-
-  const handleSave = (editedChildId: any) => {
-    const updatedChildren = children?.map((child) => {
-      if (child.id === editedChildId) {
-        return { ...child, status: editedStatus };
-      }
-      return child;
-    });
-
-    setChildren(updatedChildren);
-    setEditPopupVisible(false);
-    setEditedStatus(editedStatus);
-  };
-
   return (
     <>
       <table className="w-full border-collapse border border-gray-400">
         <thead>
           <tr className="bg-gray-200">
-            <th
-              onClick={() => sortBy("lsa")}
-              className="border border-gray-400 px-4 py-2 cursor-pointer"
-            >
-              LSA {getSortIcon("lsa")}
-            </th>
             <th
               onClick={() => sortBy("school")}
               className="border border-gray-400 px-4 py-2 cursor-pointer"
@@ -153,69 +95,42 @@ const ChildTable = ({ child }: any) => {
             >
               Rating {getSortIcon("rating")}
             </th>
-            <th className="border border-gray-400 px-4 py-2">Action</th>
           </tr>
         </thead>
         <tbody>
           {sortedChildren().map((child) => (
             <tr key={child.id} onClick={handleRowClick}>
-              <td className="border border-gray-400 px-4 py-2">{child.lsa}</td>
               <td className="border border-gray-400 px-4 py-2">
-                {child.school}
+                {child?.lsaRequests[0]?.school}
+              </td>
+
+              <td className="border border-gray-400 px-4 py-2">
+                {child?.schooling[0]?.grade}
               </td>
               <td className="border border-gray-400 px-4 py-2">
-                {child.grade}
-              </td>
-              <td className="border border-gray-400 px-4 py-2">{child.need}</td>
-              <td className="border border-gray-400 px-4 py-2">
-                {child.startDate}
+                {child?.lsaRequests[0]?.needs}
               </td>
               <td className="border border-gray-400 px-4 py-2">
-                {child.endDate}
+                {getFormattedDate(child?.lsaRequests[0]?.start_date)}
+              </td>
+              <td className="border border-gray-400 px-4 py-2">
+                {getFormattedDate(child?.lsaRequests[0]?.end_date)}
               </td>
               <td className="border border-gray-400 px-4 py-2">
                 {child.state}
               </td>
               <td className="border border-gray-400 px-4 py-2">
-                {child.status}
+                {child?.schooling[0]?.status}
               </td>
               <td className="border border-gray-400 px-4 py-2">
                 {child.rating}
               </td>
-              <td className="border border-gray-400 px-4 py-2">
-                <button onClick={(event) => handleEditClick(child, event)}>
-                  Edit
-                </button>
-              </td>
-              {editPopupVisible && (
-                <div
-                  className="absolute z-10 p-4 bg-white shadow-lg rounded"
-                  style={{
-                    top: `${popupPosition.y}px`,
-                    left: `${popupPosition.x}px`,
-                  }}
-                >
-                  {/* Dropdown to select status */}
-                  <select
-                    value={editedStatus}
-                    onChange={handleStatusChange}
-                    className="select select-secondary w-full max-w-xs"
-                  >
-                    <option value="Active">Active</option>
-                    <option value="Inactive">Inactive</option>
-                    <option value="Pending">Pending</option>
-                    {/* Add more status options as needed */}
-                  </select>
-                  {/* Save button */}
-                  <button onClick={handleSave}>Save</button>
-                </div>
-              )}
             </tr>
           ))}
         </tbody>
       </table>
     </>
   );
-};
+});
 
 export default ChildTable;

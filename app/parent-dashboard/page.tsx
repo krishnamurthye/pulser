@@ -1,9 +1,5 @@
 "use client";
 import { useEffect, useState } from "react";
-import AddChildPopup from "./child-new-popup";
-import ChildContactCard from "./child-contact-card";
-import ChildTable from "./child-table";
-import PersonIcon from "@/public/PersonIcon";
 import { useRouter } from "next/navigation";
 import Children from "./children/page";
 import LSARRequestsPage from "./LSA-requests/page";
@@ -83,7 +79,7 @@ const ParentDashboard = () => {
             >
               LSA Requests
             </li>
-            <li
+            {/* <li
               className={`cursor-pointer py-2 px-4 ${
                 activeNavItem === "Billing"
                   ? "bg-green-400 text-white"
@@ -92,7 +88,7 @@ const ParentDashboard = () => {
               onClick={() => handleNavItemClick("Billing")}
             >
               Billing
-            </li>
+            </li> */}
             <li
               className={`cursor-pointer py-2 px-4 ${
                 activeNavItem === "Messages"
