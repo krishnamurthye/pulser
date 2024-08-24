@@ -70,6 +70,7 @@ describe('Authentication Middleware', () => {
       .set('Authorization', `Bearer ${token}`);
 
     expect(response.status).toBe(200);
+    console.log(response.body)
     expect(response.body).toHaveLength(2);
     expect(response.body[0]).toHaveProperty('id', 2);
     expect(response.body[0]).toHaveProperty('firstName', 'Child');

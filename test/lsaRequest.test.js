@@ -16,6 +16,7 @@ describe("LSA Request API", () => {
       id: 1,
       email: "test@example.com",
       password: "password123",
+      userType: 1,
     });
     token = await generateToken(u);
 
@@ -65,7 +66,7 @@ describe("LSA Request API", () => {
 
 describe("LSA Request API", () => {
   let token;
-  let parentUser, childUser;
+  let parentUser, childUser1, childUser2;
 
   beforeAll(async () => {
     await sequelize.sync({ force: true });
@@ -76,18 +77,30 @@ describe("LSA Request API", () => {
       email: "parent@example.com",
       role: 1,
       isActive: true,
+      userType: 1,
     });
-    childUser = await appUser.create({
-      firstName: "Child",
-      lastName: "User",
-      email: "child@example.com",
+    childUser1 = await appUser.create({
+      firstName: "Child1",
+      lastName: "User1",
+      email: "child1@example.com",
       parentId: parentUser.id,
       role: 2,
       isActive: true,
+      userType: 2,
+    });
+
+    childUser2 = await appUser.create({
+      firstName: "Child2",
+      lastName: "User2",
+      email: "child2@example.com",
+      parentId: parentUser.id,
+      role: 2,
+      isActive: true,
+      userType: 2,
     });
 
     await lsaRequest.create({
-      child: childUser.id,
+      child: childUser1.id,
       age: 10,
       grade: 5,
       school: 1,
@@ -96,7 +109,20 @@ describe("LSA Request API", () => {
       end_date: "2025-06-30",
       lsaType: 1,
       experience: 2,
-      comments: "Requires additional support",
+      comments: "Requires additional support for Child1",
+    });
+
+    await lsaRequest.create({
+      child: childUser2.id,
+      age: 5,
+      grade: 5,
+      school: 1,
+      needs: 1,
+      start_date: "2024-10-10",
+      end_date: "2025-05-10",
+      lsaType: 1,
+      experience: 2,
+      comments: "Requires additional support for Child2",
     });
 
     token = await generateToken(parentUser);
@@ -104,13 +130,13 @@ describe("LSA Request API", () => {
 
   it("should create an LSA request", async () => {
     const lsaRequestData = {
-      child: childUser.id,
+      child: childUser1.id,
       age: 10,
       grade: 5,
       school: 1,
       needs: 1,
       start_date: "2024-09-01",
-      end_date: "2025-06-30",
+      end_date: "2025-05-30",
       lsaType: 1,
       experience: 2,
       comments: "Requires additional support",
@@ -133,6 +159,30 @@ describe("LSA Request API", () => {
 
     expect(response.status).toBe(200);
     expect(response.body.length).toBeGreaterThan(0);
-    expect(response.body[0].child).toBe(childUser.id);
+    expect(response.body[0].child).toBe(childUser1.id);
   });
+
+  it('should return a list of children with lsa requests for a given userId', async () => {
+    
+  
+    const response = await request(app)
+      .get('/api/parent/list/child')
+      .set('Authorization', `Bearer ${token}`);
+
+    expect(response.status).toBe(200);
+    console.log("response.body ************* " );
+    console.log(response.body)
+    expect(response.body).toHaveLength(2);
+    expect(response.body[0]).toHaveProperty('id', 2);
+    expect(response.body[0]).toHaveProperty('firstName', 'Child1');
+    expect(response.body[0]).toHaveProperty('lastName', 'User1');
+
+    expect(response.body[1]).toHaveProperty('id', 3);
+    expect(response.body[1]).toHaveProperty('firstName', 'Child2');
+    expect(response.body[1]).toHaveProperty('lastName', 'User2');
+  });
+
+
+
+
 });

@@ -1,6 +1,6 @@
 // controllers/childController.js
 
-const { appUser } = require("../models");
+const { appUser,lsaRequest } = require("../models");
 //const {getSchoolLists, getSchoolSystemLists} = require('../loaders/loadSchools');
 
 // Controller function to add a new child under an existing parent
@@ -60,18 +60,35 @@ exports.listChild = async (req, res) => {
     }
 
     // Create the child under the parent
+    // const children = await appUser.findAll({
+    //   where: {
+    //     parentId: parent.id,
+    //     userType: 2, // Assuming userType 2 is for children
+    //   },
+    //   attributes: ["id", "firstName", "lastName", "dob", "email", "gender",],
+    // });
+
     const children = await appUser.findAll({
       where: {
         parentId: parent.id,
         userType: 2, // Assuming userType 2 is for children
       },
-      attributes: ["id", "firstName", "lastName", "dob", "email"],
+      attributes: ["id", "firstName", "lastName", "dob", "email", "gender"], // Select specific fields
+      include: [
+        {
+          model: lsaRequest, // Include lsaRequest model
+          as: 'lsaRequests', // Alias for the association
+          attributes: ["id", "age", "grade", "school", "needs", "start_date", "end_date", "lsaType", "experience", "comments"], // Select specific fields
+        }
+      ]
     });
+    console.log("listChild: ")
+    console.log(children)
 
     res.status(200).json(children);
     // Respond with the newly created child
   } catch (error) {
-    console.error("Error adding child:", error);
+    console.error("Error listing child:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 };
@@ -100,7 +117,7 @@ exports.getChild = async (req, res) => {
         userType: 2, // Assuming userType 2 is for children
         id:childId
       },
-      attributes: ["id", "firstName", "lastName", "dob", "email"],
+      attributes: ["id", "firstName", "lastName", "dob", "email", "gender"],
     });
 
     res.status(200).json(children);

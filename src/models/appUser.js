@@ -21,33 +21,14 @@ module.exports = function (sequelize, DataTypes) {
       phoneNumber: DataTypes.STRING,
       dob: DataTypes.DATE,
       isActive: DataTypes.BOOLEAN,
-      nationality: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
-      highestEducation: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
-      ethnicity: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
-      specialization: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
-      gender: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
-      cv: {
-        type: DataTypes.BLOB("long"),
-        allowNull: true,
-      },
-    },
-    {
-      tableName: "app_user",
+    nationality: DataTypes.STRING,
+    highestEducation: DataTypes.STRING,
+    ethnicity: DataTypes.STRING,
+    specialization: DataTypes.STRING,
+    gender: DataTypes.STRING,
+    cv: DataTypes.BLOB("long"),
+  }, {
+    tableName: 'app_user',
       timestamps: true,
     }
   );
@@ -58,6 +39,8 @@ module.exports = function (sequelize, DataTypes) {
   //     as: "workExperiences",
   //   });
   // };
-
+ appUser.associate = (models) => {
+    appUser.hasMany(models.lsaRequest, { foreignKey: 'child', as: 'lsaRequests' });
+  };
   return appUser;
 };
