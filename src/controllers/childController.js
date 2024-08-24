@@ -92,6 +92,11 @@ exports.listChild = async (req, res) => {
           model: lsaRequest, // Include lsaRequest model
           as: 'lsaRequests', // Alias for the association
           attributes: ["id", "age", "grade", "school", "needs", "start_date", "end_date", "lsaType", "experience", "comments"], // Select specific fields
+        },
+        {
+          model: schooling, // Include schooling model
+          as: 'schooling', // Alias for the association
+          attributes: ["id", "schoolSystem", "grade", "schoolId", "status", "needLevel", "additionalDetails"], // Select specific fields
         }
       ]
     });

@@ -55,7 +55,7 @@ const getLsaRequestsByParent = async (req, res) => {
             where: { child: childIds },
             include: [{ model: appUser, as: 'childDetails' }]
         });
-
+        console.log(lsaRequest);
         res.status(200).json(lsaRequests);
     } catch (error) {
         console.error('Error fetching LSA requests:', error);
