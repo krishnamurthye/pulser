@@ -1,6 +1,10 @@
 const { app, server, isServerReady } = require('../src/app'); 
 const { appUser, authentication, sequelize } = require('../src/models');
 
+jest.mock('../src/util/emailUtil', () => ({
+  sendPasswordResetEmail: jest.fn().mockResolvedValue({ success: true }) // Or adjust as necessary
+}));
+
 // May not required because setup is doing the same
 beforeAll(async () => {
   try{

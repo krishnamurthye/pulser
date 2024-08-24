@@ -4,7 +4,8 @@ const express = require("express");
 const { appUser, authentication, sequelize } = require("../models");
 const { loadUserRoles, getUserRoles } = require("../loaders/loadRoles");
 const { hashPassword, comparePassword } = require("../util/passwordUtil");
-const generateToken = require("../middleware/tokenGenerator");
+const { generateToken, verifyToken }  = require("../middleware/tokenGenerator");
+const { sendPasswordResetEmail } = require("../util/emailUtil"); // Import a utility function for sending emails (if applicable
 const {
   getUserTypes,
   getUserTypeById,
@@ -134,29 +135,162 @@ router.post("/login", async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-    // Find the user by email
-    const auth1 = await authentication.findOne({
-      where: { auth_user_id: user.id },
-    });
-    if (!auth1) {
-      return res.status(404).json({ message: "User not found" });
+
+        // Find the authentication record
+        const auth = await authentication.findOne({ where: { auth_user_id: user.id } });
+        if (!auth) {
+            return res.status(404).json({ message: "Authentication record not found" });
+        }
+
+        // Check if user is blocked
+        if (auth.blocked) {
+            return res.status(403).json({ message: "Your account is blocked due to too many failed login attempts." });
+        }
+
+        // Check for forced password reset
+        if (auth.forcePasswordReset) {
+            return res.status(403).json({ message: "Please reset your password to continue." });
     }
 
     // Compare passwords
-    const isPasswordValid = await comparePassword(
-      password,
-      email,
-      auth1.password
-    );
+        const isPasswordValid = await comparePassword(password, email, auth.password);
     if (!isPasswordValid) {
+            // Increment failed attempts
+            await auth.update({ failedAttempts: auth.failedAttempts + 1 });
+
+            // Block the user if failed attempts exceed the threshold
+            if (auth.failedAttempts >= 3) {
+                await auth.update({ blocked: true });
+                return res.status(403).json({ message: "Your account has been blocked." });
+            }
+
       return res.status(401).json({ message: "Invalid credentials" });
     }
+
+        // Reset failed attempts on successful login
+        await auth.update({ failedAttempts: 0 });
+
     // Generate JWT token
     const token = await generateToken(user);
 
     res.json({ token, user });
   } catch (error) {
     console.error("Error during login:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+
+router.post("/reset-password", async (req, res) => {
+    const { token, newPassword } = req.body;
+
+    try {
+        // Verify the token and get the user ID
+        const decodedToken = await verifyToken(token);
+        const user = await appUser.findByPk(decodedToken.id);
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        // Find the authentication record
+        const auth = await authentication.findOne({ where: { auth_user_id: user.id } });
+
+        if (!auth) {
+            return res.status(404).json({ message: "Authentication record not found" });
+        }
+
+        // Hash the new password
+        const hashedPassword = await hashPassword(newPassword, user.email);
+
+        // Update password and reset related fields
+        await auth.update({
+            password: hashedPassword,
+            forcePasswordReset: false, // Clear force reset flag
+            failedAttempts: 0, // Reset failed attempts
+            blocked: false // Unblock the user
+        });
+
+        res.status(200).json({ message: "Password reset successfully" });
+    } catch (error) {
+        console.error("Error resetting password:", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+});
+
+router.post("/request-reset-password", async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    // Check if user exists
+    const user = await appUser.findOne({ where: { email } });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Generate a reset token (can be a JWT or a random token stored in DB)
+    const resetToken = await generateToken(user, { expiresIn: '1h' }); // Adjust the expiration as needed
+
+    // Save token to the DB or cache for later validation (optional)
+    await authentication.update(
+      { resetToken: resetToken,
+        forcePasswordReset: true,
+        blocked: false
+       }, // Save the reset token
+      { where: { auth_user_id: user.id } }
+    );
+
+    // Send reset email with token (example, implement `sendResetEmail`)
+    await sendPasswordResetEmail(email, resetToken);
+
+    res.status(200).json({ message: "Password reset link sent to email" });
+  } catch (error) {
+    console.error("Error requesting password reset:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+router.post("/reset-password", async (req, res) => {
+  const { token, newPassword } = req.body;
+
+  try {
+    // Verify the reset token
+    const decodedToken = await verifyToken(token); // Add your JWT token verification logic here
+
+    // Find the user associated with this reset token
+    const user = await appUser.findByPk(decodedToken.id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Get the user authentication record
+    const auth = await authentication.findOne({
+      where: { auth_user_id: user.id },
+    });
+    if (!auth) {
+      return res.status(404).json({ message: "Authentication record not found" });
+    }
+
+    // Check if the token matches (if storing it in DB)
+    if (auth.resetToken !== token) {
+      return res.status(400).json({ message: "Invalid or expired reset token" });
+    }
+
+    // Hash the new password
+    const hashedPassword = await hashPassword(newPassword, user.email);
+
+    // Update the password in the database
+    await authentication.update(
+      {
+        password: hashedPassword,
+        resetToken: null, // Clear the reset token
+      },
+      { where: { auth_user_id: user.id } }
+    );
+
+    res.status(200).json({ message: "Password reset successfully" });
+  } catch (error) {
+    console.error("Error resetting password:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 });
