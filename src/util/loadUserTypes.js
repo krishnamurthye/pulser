@@ -25,6 +25,7 @@ function getUserTypes() {
 }
 
 function getUserTypeById(id) {
+  loadUserTypes();
   return userTypes.find(
     (userType) => userType.id === id || userType.name === id
   );

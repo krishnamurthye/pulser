@@ -157,6 +157,8 @@ describe("LSA Request API", () => {
       .get("/api/lsaRequest/list")
       .set("Authorization", `Bearer ${token}`);
 
+    console.log("response.body ************* " );
+    console.log(response.body)
     expect(response.status).toBe(200);
     expect(response.body.length).toBeGreaterThan(0);
     expect(response.body[0].child).toBe(childUser1.id);

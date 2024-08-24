@@ -39,10 +39,11 @@ router.post("/register", async (req, res) => {
     }
 
     let userTypeFromConfig = "";
+    let userTypeId
     try {
       console.log("userType", userType);
-      const userTypeName = getUserTypeById(userType);
-      const userTypeId = parseInt(userTypeName.id); // Convert role to an integer
+      const userTypeName = getUserTypeByName(userType)
+       userTypeId = parseInt(userTypeName.id); // Convert userType to an integer
 
       userTypeFromConfig = getUserTypeById(userTypeId);
       console.log("userTypeFromConfig", userTypeFromConfig);
@@ -100,7 +101,7 @@ router.post("/register", async (req, res) => {
       email,
       role,
       phoneNumber,
-      userType: this.userTypeId,
+      userType: userTypeId,
     });
 
     //console.log("input hashed password:" + password);

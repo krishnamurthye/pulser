@@ -5,14 +5,14 @@ const { app, server, isServerReady } = require('../src/app');
 const { appUser, authentication, sequelize } = require('../src/models');
 const { hashPassword, comparePassword } = require('../src/util/passwordUtil');
 
-const parentType = 1;
-const lasType = 3;
+const parentType = "parent";
+const lasType = "lsa";
 
 const parentRole = 1;
 const lasRole = 2;
 
 const disallowedRole = 4;
-const disallowedUserType = 5;
+const disallowedUserType = "councillor";
 
 
 describe('POST /api/auth/register', () => {
@@ -31,6 +31,7 @@ describe('POST /api/auth/register', () => {
       .post('/api/auth/register')
       .send(userData);
 
+      console.log(response.body)
     expect(response.statusCode).toBe(201);
     expect(response.body).toHaveProperty('message', 'User registered successfully');
 
@@ -41,7 +42,7 @@ describe('POST /api/auth/register', () => {
     expect(user).toBeDefined();
     expect(auth).toBeDefined();
     expect(auth.username).toBe(userData.username);
-    expect(user.userType).toBe(parentType);
+    expect(user.userType).toBe(1);
     expect(user.role).toBe(parentRole);
 
     // Check if password is hashed
@@ -97,7 +98,7 @@ describe('POST /api/auth/register', () => {
     expect(user).toBeDefined();
     expect(auth).toBeDefined();
     expect(auth.username).toBe(userData.username);
-    expect(user.userType).toBe(lasType);
+    expect(user.userType).toBe(3);
     expect(user.role).toBe(lasRole);
 
     // Check if password is hashed
