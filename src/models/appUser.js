@@ -41,6 +41,7 @@ module.exports = function (sequelize, DataTypes) {
   // };
  appUser.associate = (models) => {
     appUser.hasMany(models.lsaRequest, { foreignKey: 'child', as: 'lsaRequests' });
+    appUser.hasMany(models.schooling, { foreignKey: 'userId', as: 'schooling' });
   };
   return appUser;
 };

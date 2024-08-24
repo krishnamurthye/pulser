@@ -6,13 +6,23 @@ module.exports = function(sequelize, DataTypes) {
         autoIncrement: true
       },
       name: DataTypes.STRING,
-      schoolSystem: DataTypes.INTEGER,
+    schoolSystem: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: 'school_system', // Ensure this matches the actual table name
+        key: 'id'
+      }
+    },
       isActive: DataTypes.BOOLEAN
     }
     ,{
       tableName: 'schools_list',
       timestamps: false,
     });
+
+  // schoolsList.associate = (models) => {
+  //   schoolsList.belongsTo(models.schoolSystem, { foreignKey: 'schoolSystem', as: 'system' });
+  // };
 
     return schoolsList;
 };

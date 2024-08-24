@@ -60,11 +60,11 @@ const server = app.listen(PORT, async () => {
       console.log('load user roles');
       await loadUserRoles();
 
-      loadSchoolsList();
-      console.log('loaded SchoolsList');
-
       loadSchoolsSystem();
       console.log('loaded SchoolsSystem');
+
+      loadSchoolsList();
+      console.log('loaded SchoolsList');
 
       console.log('Loading Education');
       loadEducation();  // Load into memory

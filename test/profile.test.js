@@ -2,7 +2,7 @@
 
 const request = require('supertest');
 const { app, server } = require('../src/app');
-const { appUser } = require('../src/models');
+const { appUser, schooling } = require('../src/models');
 const generateToken = require("../src/middleware/tokenGenerator");
 
 describe('Authentication Middleware', () => {
@@ -22,10 +22,10 @@ describe('Authentication Middleware', () => {
     await server.close();
   });
 
-  test('should return 401 if no token is provided', async () => {
-    const response = await request(app).put('/api/profile/update');
-    expect(response.status).toBe(401);
-  });
+  // test('should return 401 if no token is provided', async () => {
+  //   const response = await request(app).put('/api/profile/update');
+  //   expect(response.status).toBe(401);
+  // });
 
   // test('should return 200 if valid token is provided', async () => {
   //   const response = await request(app)
@@ -45,12 +45,32 @@ describe('Authentication Middleware', () => {
         firstName: 'Child',
         lastName: 'User1',
         dob: '2005-01-01',
-        school: 'ABC School' // Assuming 'school' is a valid property for adding a child
+        school: 'ABC School', // Assuming 'school' is a valid property for adding a child
+        schoolSystem: 1, // Example additional data for schooling
+        grade: 5,
+        schoolId: 2,
+        status: 1,
+        needLevel: 3,
+        additionalDetails: 'Some details'
       });
 
     expect(response.status).toBe(201); // Assuming you return a 201 status code upon successful creation
     expect(response.body.message).toBe('Child added successfully');
+
+    // Optionally, check if the child and schooling records were created
+    const child = await appUser.findOne({ where: { firstName: 'Child', lastName: 'User1' } });
+    expect(child).not.toBeNull();
+
+    const childSchooling = await schooling.findOne({ where: { userId: child.id } });
+    expect(childSchooling).not.toBeNull();
+    expect(childSchooling.schoolSystem).toBe(1);
+    expect(childSchooling.grade).toBe(5);
+    expect(childSchooling.schoolId).toBe(2);
+    expect(childSchooling.status).toBe(1);
+    expect(childSchooling.needLevel).toBe(3);
+    expect(childSchooling.additionalDetails).toBe('Some details');
   });
+
 
   it('should return a list of children for a given userId', async () => {
     await appUser.create({

@@ -14,6 +14,7 @@ const profileModel = require("./profile");
 const workExperienceModel = require("./workExperience");
 const needLevelModel = require("./needLevel");
 const gradesModel = require("./grades");
+const schoolingModel = require('./schooling');
 
 const sequelize = new Sequelize({
   dialect: "mysql",
@@ -28,7 +29,7 @@ const sequelize = new Sequelize({
 const userRole = userRoleModel(sequelize, Sequelize);
 const schoolSystem = schoolSystemModel(sequelize, Sequelize);
 const schoolsList = schoolsListModel(sequelize, Sequelize);
-// const schooling = schoolingModel(sequelize, Sequelize);
+const schooling = schoolingModel(sequelize, Sequelize);
 
 const appUser = appUserModel(sequelize, Sequelize);
 const authentication = authModel(sequelize, Sequelize);
@@ -65,7 +66,7 @@ const models = {
   // address,
   schoolSystem,
   schoolsList,
-  // schooling,
+  schooling,
   lsaRequest,
   messageSQLModel,
   education,

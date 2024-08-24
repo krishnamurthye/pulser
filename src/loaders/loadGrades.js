@@ -17,10 +17,10 @@ let isLoaded = false;
     // Load the JSON file containing grades levels
     const filePath = path.join(__dirname, "../../config/grades-list.json"); // Adjust the path if necessary
     gradesList = JSON.parse(fs.readFileSync(filePath, "utf-8"));
-    console.log("gradesList ->", levels);
+    console.log("gradesList ->", gradesList);
 
     // Insert levels into the database if they don't already exist
-    for (const level of levels) {
+    for (const level of gradesList) {
       await grades.findOrCreate({
         where: { id: level.id },
         defaults: {

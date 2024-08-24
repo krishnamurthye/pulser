@@ -17,10 +17,10 @@ let isLoaded = false;
     // Load the JSON file containing need levels
     const filePath = path.join(__dirname, "../../config/need-levels-list.json"); // Adjust the path if necessary
     needLevelList = JSON.parse(fs.readFileSync(filePath, "utf-8"));
-    console.log("Need Levels ->", levels);
+    console.log("Need Levels ->", needLevelList);
 
     // Insert levels into the database if they don't already exist
-    for (const level of levels) {
+    for (const level of needLevelList) {
       await needLevel.findOrCreate({
         where: { id: level.id },
         defaults: {

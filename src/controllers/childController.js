@@ -1,13 +1,13 @@
 // controllers/childController.js
 
-const { appUser,lsaRequest } = require("../models");
+const { appUser,lsaRequest,schooling } = require("../models");
 //const {getSchoolLists, getSchoolSystemLists} = require('../loaders/loadSchools');
 
 // Controller function to add a new child under an existing parent
 exports.addChild = async (req, res) => {
   try {
     // Parse request body
-    const { firstName, lastName, dob, school } = req.body;
+    const { firstName, lastName, dob, school, schoolSystem, grade, schoolId, status, needLevel, additionalDetails } = req.body;
     const authUserId = req.authUser.id;
 
     // Validate input
@@ -34,6 +34,19 @@ exports.addChild = async (req, res) => {
       userType: 2, // Assuming 'child' user type has ID 2, adjust as per your user type definitions
       isActive: true, // Assuming the child is active upon creation
     });
+
+    // Add schooling information for the child
+    if (schoolSystem || grade || schoolId || status || needLevel || additionalDetails) {
+      await schooling.create({
+        userId: child.id,
+        schoolSystem,
+        grade,
+        schoolId,
+        status,
+        needLevel,
+        additionalDetails
+      });
+    }
 
     res.status(201).json({ message: "Child added successfully", child });
     // Respond with the newly created child

@@ -8,6 +8,12 @@ let schoolsLists = [];
 let isSchoolsListLoaded = false;
 
 async function loadSchoolsList() {
+try{
+  if (this.isSchoolsListLoaded) {
+    console.log("Schools List already loaded.");
+    return;
+  }
+
   const filePath = path.join(__dirname, "../../config/schools-list.json");
   schoolsLists = JSON.parse(fs.readFileSync(filePath, "utf-8"));
 
@@ -22,6 +28,10 @@ async function loadSchoolsList() {
     });
   }
   isSchoolsListLoaded = true;
+  console.log("Schools list have been loaded and cached.");
+  } catch (error) {
+        console.error("Error loading Schools List:", error);
+      }
 }
 
 function getSchoolLists() {
@@ -36,6 +46,12 @@ let schoolSystemLists = [];
 let isSystemListLoaded = false;
 
 async function loadSchoolsSystem() {
+try{
+  if (this.isSystemListLoaded) {
+    console.log(" Schools System already loaded.");
+    return;
+  }
+
   const filePath = path.join(__dirname, "../../config/school-system.json");
   schoolSystemLists = JSON.parse(fs.readFileSync(filePath, "utf-8"));
   for (const ss of schoolSystemLists) {
@@ -48,6 +64,10 @@ async function loadSchoolsSystem() {
     });
   }
   isSystemListLoaded = true;
+  console.log("Schools System have been loaded and cached.");
+  } catch (error) {
+      console.error("Error loading Schools System:", error);
+    }
 }
 
 function getSchoolSystemLists() {
