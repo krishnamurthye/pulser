@@ -48,4 +48,29 @@ describe('School List', () => {
       expect(response.body.length).toBeGreaterThan(0);
   });
 
+  test('should return needLevelList', async () => {
+    
+    const response = await request(app)
+      .get('/api/values/list/needLevelList')
+      .set('Authorization', `Bearer ${token}`)
+      
+      console.log("needLevelList response.body", response.body);
+      expect(response.status).toBe(200);
+      expect(response.body).toBeInstanceOf(Array);
+      expect(response.body.length).toBeGreaterThan(0);
+  });
+
+
+  test('should return gradesList', async () => {
+    
+    const response = await request(app)
+      .get('/api/values/list/gradesList')
+      .set('Authorization', `Bearer ${token}`)
+      
+      console.log("gradesList response.body", response.body);
+      expect(response.status).toBe(200);
+      expect(response.body).toBeInstanceOf(Array);
+      expect(response.body.length).toBeGreaterThan(0);
+  });
+
  });

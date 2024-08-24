@@ -30,8 +30,8 @@ function getEducationList() {
     return educationList;
 }
 
-function isInitialized() {
+function isEducationListInitialized() {
     return isLoaded;
 }
 
-module.exports = { loadEducation, getEducationList, isInitialized };
+module.exports = { loadEducation, getEducationList, isEducationListInitialized };

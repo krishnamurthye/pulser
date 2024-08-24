@@ -1,8 +1,17 @@
 // src/controllers/profileController.js
 
-const { loadSchoolsList, loadSchoolsSystem, getSchoolLists, getSchoolSystemLists, isSchoolsListInitialized, isSchoolSystemListInitialized } = require('../loaders/loadData');
+const { 
+  loadSchoolsList, 
+  loadSchoolsSystem, 
+  getSchoolLists, 
+  getSchoolSystemLists, 
+  isSchoolsListInitialized, 
+  isSchoolSystemListInitialized,
+  getNeedLevels,
+  getGrades
+} = require('../loaders');
 
-const getSchoolList = async (req, res) => {
+exports.getSchoolList = async (req, res) => {
   try {
     if (!isSchoolsListInitialized()) {
       await loadSchoolsList();
@@ -18,7 +27,7 @@ const getSchoolList = async (req, res) => {
 };
 
 
-const getSchoolSystemList = async (req, res) => {
+exports.getSchoolSystemList = async (req, res) => {
   try {
     if (!isSchoolSystemListInitialized()) {
       await loadSchoolsSystem();
@@ -33,7 +42,34 @@ const getSchoolSystemList = async (req, res) => {
   }
 };
 
+exports.getNeedLevelList = async (req, res) => {
+  try {
+    
+    const needLevelLists = await getNeedLevels();
+    console.log(" *** Need Level Lists ** ", needLevelLists);
 
-module.exports = {
-  getSchoolList, getSchoolSystemList
+    res.status(200).json(needLevelLists);
+  } catch (error) {
+    console.error('Error loading need Level  list:', error);
+    res.status(500).json({ error: 'An error occurred while loading needLevel  List' });
+  }
 };
+
+
+exports.getGardes = async (req, res) => {
+  try {
+    
+    const gradesLists = await getGrades();
+    console.log(" *** Grades Lists ** ", gradesLists);
+
+    res.status(200).json(gradesLists);
+  } catch (error) {
+    console.error('Error loading grades  list:', error);
+    res.status(500).json({ error: 'An error occurred while loading grades  List' });
+  }
+};
+
+
+// module.exports = {
+//   getSchoolList, getSchoolSystemList, getNeedLevelList
+// };

@@ -8,15 +8,20 @@ const { loadUserRoles, getUserRoles } = require('./loaders/loadRoles');
 const profileRoutes = require('./routes/profile');
 const parentRoutes = require('./routes/child');
 const valueRoutes = require('./routes/value');
-const { loadSchoolsList, loadSchoolsSystem } = require('./loaders/loadData');
 const { loadUserTypes } = require('./util/loadUserTypes');
 const lsaRequestRoutes = require('./routes/lsaRequest');
-const { loadEducation } = require('./loaders/loadEducation');
-const { loadSpecialization } = require('./loaders/loadSpecialization');
 const messageRoutes = require("./routes/message");
+const { 
+  loadSchoolsList, 
+  loadSchoolsSystem, 
+  loadEducation, 
+  loadSpecialization,
+  loadNeedLevels,
+  loadGrades 
+} = require('./loaders');
+
 
 const cors = require("cors");
-
 
 let isServerUp=false;
 
@@ -58,7 +63,6 @@ const server = app.listen(PORT, async () => {
       loadSchoolsList();
       console.log('loaded SchoolsList');
 
-
       loadSchoolsSystem();
       console.log('loaded SchoolsSystem');
 
@@ -69,6 +73,18 @@ const server = app.listen(PORT, async () => {
       console.log('Loading Specialization');
       loadSpecialization();  // Load into memory
       console.log('Specialization loaded');
+
+      console.log('Loading Specialization');
+      loadSpecialization();  // Load into memory
+      console.log('Specialization loaded');
+
+      console.log('Loading NeedLevels');
+      loadNeedLevels();  // Load into memory
+      console.log('NeedLevels loaded');
+
+      console.log('Loading Grades');
+      loadGrades()
+      console.log('Grades loaded');
 
       console.log('loaded');
       isServerUp = true;

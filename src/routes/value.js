@@ -8,5 +8,9 @@ const valueController = require('../controllers/valuesController');
 // Route to add a new child under an existing parent
 router.get('/list/schoolsList', authenticateToken, valueController.getSchoolList);
 router.get('/list/schoolSystemsList', authenticateToken, valueController.getSchoolSystemList);
+router.get('/list/needLevelList', authenticateToken, valueController.getNeedLevelList);
+router.get('/list/gradesList', authenticateToken, valueController.getGardes);
+
+
 
 module.exports = router;

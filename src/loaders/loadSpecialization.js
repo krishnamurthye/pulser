@@ -8,6 +8,12 @@ let isLoaded = false;
 
 async function loadSpecialization() {
     try {
+
+        if (isLoaded) {
+            console.log('Specialization data is already loaded.');
+            return;
+        }
+
         const filePath = path.join(__dirname, '../../config/specialization.json');
         specializationList = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
 
@@ -28,6 +34,7 @@ async function loadSpecialization() {
 }
 
 function getSpecializations() {
+    loadSpecialization();
     return specializationList;
 }
 

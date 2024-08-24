@@ -3,8 +3,8 @@ const request = require('supertest');
 const { app, server, isServerReady } = require('../src/app');   
 const { hashPassword, comparePassword } = require('../src/util/passwordUtil');
 
-const parentType=1;
-const lasType=3;
+const parentType="parent";
+const lasType="lsa";
 
 const parentRole=1;
 const lasRole=2;

@@ -12,6 +12,8 @@ const educationModel = require("./education");
 const specializationModel = require("./specialization");
 const profileModel = require("./profile");
 const workExperienceModel = require("./workExperience");
+const needLevelModel = require("./needLevel");
+const gradesModel = require("./grades");
 
 const sequelize = new Sequelize({
   dialect: "mysql",
@@ -19,6 +21,7 @@ const sequelize = new Sequelize({
   username: "root",
   password: "password",
   host: "localhost",
+  quoteIdentifiers: true
 });
 
 // const address = addressModel(sequelize, Sequelize);
@@ -35,6 +38,8 @@ const education = educationModel(sequelize, Sequelize);
 const specialization = specializationModel(sequelize, Sequelize);
 const profileSQLModel = profileModel(sequelize, Sequelize);
 const workExperienceSQLModel = workExperienceModel(sequelize, Sequelize);
+const needLevel = needLevelModel(sequelize, Sequelize);
+const grades = gradesModel(sequelize, Sequelize);
 
 appUser.hasOne(authentication, { foreignKey: "auth_user_id" });
 authentication.belongsTo(appUser, { foreignKey: "auth_user_id" });
@@ -67,6 +72,8 @@ const models = {
   specialization,
   profileSQLModel,
   workExperienceSQLModel,
+  needLevel,
+  grades
 };
 
 Object.keys(models).forEach((modelName) => {

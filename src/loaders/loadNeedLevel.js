@@ -1,37 +1,50 @@
 const fs = require("fs");
 const path = require("path");
-const { needLevelList } = require("../models");
+const { needLevel } = require("../models");
 
 let needLevelList;
 let isLoaded = false;
 
-// async function loadNeedLevel() {
-//     try {
-//         const filePath = path.join(__dirname, '../../config/need-level-list.json');
-//         specializationList = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+ // Method to load need levels from the JSON file into the database
+ async function loadNeedLevels() {
+  try {
+    // Prevent reloading if already loaded
+    if (this.isLoaded) {
+      console.log("Need levels already loaded.");
+      return;
+    }
 
-//         for (const item of needLevelList) {
-//             await specialization.findOrCreate({
-//                 where: { id: item.id },
-//                 defaults: {
-//                     specialization: item.specialization,
-//                     isActive: item.isActive
-//                 }
-//             });
-//         }
-//         isLoaded = true;
-//         console.log('Specialization data loaded successfully.');
-//     } catch (error) {
-//         console.error('Error loading specialization data:', error);
-//     }
-// }
+    // Load the JSON file containing need levels
+    const filePath = path.join(__dirname, "../../config/need-levels-list.json"); // Adjust the path if necessary
+    needLevelList = JSON.parse(fs.readFileSync(filePath, "utf-8"));
+    console.log("Need Levels ->", levels);
 
-function getSpecializations() {
-  return specializationList;
+    // Insert levels into the database if they don't already exist
+    for (const level of levels) {
+      await needLevel.findOrCreate({
+        where: { id: level.id },
+        defaults: {
+          name: level.name,
+        },
+      });
+    }
+
+    // Cache the levels locally
+    this.isLoaded = true;
+    console.log("Need levels have been loaded and cached.");
+  } catch (error) {
+    console.error("Error loading need levels:", error);
+  }
 }
 
-function isInitialized() {
+
+async function getNeedLevels() {
+  await loadNeedLevels();
+  return needLevelList;
+}
+
+function isNeedLevelsInitialized() {
   return isLoaded;
 }
 
-module.exports = { loadSpecialization, getSpecializations, isInitialized };
+module.exports = { loadNeedLevels, getNeedLevels, isNeedLevelsInitialized };
