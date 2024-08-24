@@ -17,12 +17,8 @@ const Header: React.FC = () => {
       <div className="sm:px-6 lg:px-8 container mx-auto">
         <div className="flex justify-between items-center py-4">
           <div className="flex items-center">
-            <a href="/">
-              <img
-                className="h-20 w-auto"
-                src="/pulsar-logo.jpg"
-                alt="Pulsar Logo"
-              />
+            <a href="/" className="text-white text-3xl font-bold">
+              PULSER
             </a>
           </div>
           <div className="flex items-center">

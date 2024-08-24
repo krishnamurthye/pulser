@@ -90,18 +90,6 @@ const AddChildPopup = ({ onClose, gradeList, needLevelList }: any) => {
         <div className="grid grid-cols-2 gap-10">
           {/* First Column */}
           <div>
-            <div className="mb-4 flex items-center">
-              <PersonIcon />
-              <input
-                type="checkbox"
-                id="isActive"
-                name="isActive"
-                checked={formData.isActive}
-                onChange={handleChange}
-                className="mr-2"
-              />
-              <label htmlFor="isActive">Active</label>
-            </div>
             <div className="mb-4">
               <label htmlFor="firstName" className="block mb-2">
                 First Name
@@ -143,6 +131,17 @@ const AddChildPopup = ({ onClose, gradeList, needLevelList }: any) => {
                 required
                 className="w-full px-3 py-2 border rounded-md"
               />
+            </div>
+            <div className="mb-4 flex items-center">
+              <input
+                type="checkbox"
+                id="isActive"
+                name="isActive"
+                checked={formData.isActive}
+                onChange={handleChange}
+                className="mr-2"
+              />
+              <label htmlFor="isActive">Active</label>
             </div>
             {/* Add other form fields for first column */}
           </div>

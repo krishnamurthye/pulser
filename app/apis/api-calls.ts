@@ -25,6 +25,23 @@ export const fetchChildrenForParent = async () => {
   }
 };
 
+export const fetchChildById = async (id: string) => {
+  const response = await fetch(buildUrl(parentRoute, `/get/child/${id}`), {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${getAuthToken()}`,
+    },
+  });
+
+  if (response.ok) {
+    const result = await response.json();
+    return result;
+  } else {
+    return {};
+  }
+};
+
 export const fetchLSARequests = async () => {
   const response = await fetch(buildUrl(lsaRoute, "/list"), {
     method: "GET",

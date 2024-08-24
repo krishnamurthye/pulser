@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { fetchChildById } from "../apis/api-calls";
 
 const ChildTable = ({ child }: any) => {
   // Sample data for the table, you can replace it with actual data from your application state
@@ -17,6 +18,15 @@ const ChildTable = ({ child }: any) => {
     key: null,
     direction: "ascending",
   });
+
+  useEffect(() => {
+    getChildInfo();
+  }, [child]);
+
+  const getChildInfo = async () => {
+    const response: any = await fetchChildById(child.id);
+    setChildren(response);
+  };
 
   const sortBy = (key: any) => {
     let direction = "ascending";

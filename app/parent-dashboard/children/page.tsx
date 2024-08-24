@@ -52,7 +52,7 @@ const Children = ({ gradeList, needLevelList, schoolsList }: any) => {
           className="bg-green-400 text-white py-2 px-4 rounded"
           onClick={handleAddChildClick}
         >
-          Add New
+          New Child
         </button>
         {/* Search bar */}
         <input
@@ -63,33 +63,54 @@ const Children = ({ gradeList, needLevelList, schoolsList }: any) => {
           className="border border-gray-400 rounded px-2 py-1"
         />
       </div>
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {children?.map((child: any) => (
           <div
             key={child.id}
-            className="bg-gray-200 p-4 rounded-md cursor-pointer text-center"
+            className="bg-white p-6 rounded-lg shadow-md cursor-pointer text-center hover:shadow-lg transition-shadow"
             onClick={() => handleEditChildClick(child)}
           >
-            <PersonIcon />
-            <div className="grid grid-cols-2 text-left gap-y-2">
-              <p className="font-bold">Name:</p>
-              <p>{child.firstName + " " + child.lastName}</p>
+            <div className="flex items-center justify-center mb-4">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-16 w-16 text-gray-500"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"
+                />
+              </svg>
+            </div>
 
-              <p className="font-bold">DOB:</p>
-              <p>{getFormattedDate(child.dob)}</p>
+            <div className="grid grid-cols-2 text-left gap-y-3">
+              <p className="font-semibold text-gray-700">Name:</p>
+              <p className="text-gray-600">
+                {child.firstName + " " + child.lastName}
+              </p>
 
-              <p className="font-bold">Grade:</p>
-              <p>{child.grade}</p>
+              <p className="font-semibold text-gray-700">DOB:</p>
+              <p className="text-gray-600">{getFormattedDate(child.dob)}</p>
 
-              <p className="font-bold">Level:</p>
-              <p>{child.needLevel}</p>
+              <p className="font-semibold text-gray-700">Grade:</p>
+              <p className="text-gray-600">{child.grade}</p>
 
-              <p className="font-bold">Status:</p>
-              <p>{child.isActive}</p>
+              <p className="font-semibold text-gray-700">Level:</p>
+              <p className="text-gray-600">{child.needLevel}</p>
+
+              <p className="font-semibold text-gray-700">Status:</p>
+              <p className="text-gray-600">
+                {child.isActive ? "Active" : "Inactive"}
+              </p>
             </div>
           </div>
         ))}
       </div>
+
       {isAddChildPopupOpen && (
         <AddChildPopup
           onClose={handleClosePopup}
