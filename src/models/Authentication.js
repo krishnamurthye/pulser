@@ -1,6 +1,6 @@
 module.exports = (sequelize, type) => {
     return sequelize.define('authentication', {
-      id1: {
+        id: {
         type: type.INTEGER,
         primaryKey: true,
         autoIncrement: true
@@ -24,6 +24,18 @@ module.exports = (sequelize, type) => {
       failedAttempts: {
         type: type.INTEGER,
         defaultValue: 0
+        },
+        blocked: {
+            type: type.BOOLEAN,
+            defaultValue: false // Block user after 3 failed login attempts
+        },
+        forcePasswordReset: {
+            type: type.BOOLEAN,
+            defaultValue: false // Force user to reset password after reset request
+      },
+      resetToken: {
+        type: type.STRING,
+        allowNull: true,
       }
     },{
       tableName: 'authentication',
