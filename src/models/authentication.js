@@ -42,4 +42,3 @@ module.exports = (sequelize, type) => {
       timestamps: true,
     });
   };
-  
