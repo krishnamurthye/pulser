@@ -24,12 +24,13 @@ const ForgotPassword = () => {
       );
 
       const data = await response.json();
-
       if (response.ok) {
         toast.success("Password reset link sent to your email!", {
           position: "top-right",
           className: "custom-toast",
         });
+        // Reset form after successful submission
+        actions.resetForm();
       } else {
         toast.error(data.message || "Failed to send reset link", {
           position: "top-right",
