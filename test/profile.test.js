@@ -3,7 +3,7 @@
 const request = require('supertest');
 const { app, server } = require('../src/app');
 const { appUser, schooling } = require('../src/models');
-const generateToken = require("../src/middleware/tokenGenerator");
+const { generateToken } = require('../src/middleware/tokenGenerator');
 
 describe('Authentication Middleware', () => {
   let token;

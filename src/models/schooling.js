@@ -1,3 +1,4 @@
+// .. models/schooling.js
 module.exports = function(sequelize, DataTypes) {
     const schooling = sequelize.define('schooling', {
       id: {
@@ -8,24 +9,31 @@ module.exports = function(sequelize, DataTypes) {
       userId: {
         type: DataTypes.INTEGER,
         references: {
-        model: 'app_user', // Ensure this matches the actual table name
+        model: 'app_user',
           key: 'id'
-      }
+        },
+        onUpdate: 'NO ACTION',
+        onDelete: 'NO ACTION',
       },
       schoolSystem: {
         type: DataTypes.INTEGER,
         references: {
-        model: 'school_system', // Ensure this matches the actual table name
+        model: 'school_system',
           key: 'id'
-      }
+        },
+        onUpdate: 'NO ACTION',
+        onDelete: 'NO ACTION',
+
       },
       grade: DataTypes.INTEGER,
       schoolId: {
         type: DataTypes.INTEGER,
         references: {
-        model: 'schools_list', // Ensure this matches the actual table name
+        model: 'schools_list',
           key: 'id'
-      }
+        },
+        onUpdate: 'NO ACTION',
+        onDelete: 'NO ACTION',
       },
       status: DataTypes.INTEGER,
       created_at: DataTypes.DATE,
@@ -36,11 +44,11 @@ module.exports = function(sequelize, DataTypes) {
       timestamps: true,
     });
 
-  schooling.associate = (models) => {
-    schooling.belongsTo(models.appUser, { foreignKey: 'userId', as: 'user' });
-    schooling.belongsTo(models.schoolSystem, { foreignKey: 'schoolSystem', as: 'system' });
-    schooling.belongsTo(models.schoolsList, { foreignKey: 'schoolId', as: 'school' });
-  };
+//  schooling.associate = (models) => {
+//    schooling.belongsTo(models.appUser, { foreignKey: 'userId', as: 'appUser' });
+//    schooling.belongsTo(models.schoolSystem, { foreignKey: 'schoolSystem', as: 'system' });
+//    schooling.belongsTo(models.schoolsList, { foreignKey: 'schoolId', as: 'school' });
+//  };
 
     return schooling;
 };
