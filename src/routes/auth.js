@@ -1,11 +1,11 @@
 // src/routes/auth.js
 
 const express = require("express");
-const { appUser, authentication, sequelize } = require("../models");
+const { appUser, authentication, sequelize,userRole } = require("../models");
 const { loadUserRoles, getUserRoles } = require("../loaders/loadRoles");
 const { hashPassword, comparePassword } = require("../util/passwordUtil");
 const { generateToken, verifyToken } = require("../middleware/tokenGenerator");
-const { sendPasswordResetEmail } = require("../util/emailUtil"); // Import a utility function for sending emails (if applicable
+const { sendPasswordResetEmail, sendVerificationCodeEmail, generateVerificationCode } = require("../util/emailUtil"); // Import a utility function for sending emails (if applicable
 const {
     getUserTypes,
     getUserTypeById,
@@ -30,6 +30,8 @@ router.post("/register", async (req, res) => {
             password,
             userType,
         } = req.body;
+
+        console.log(firstName,lastName)
 
         // Check if username already exists
         const existingUser = await appUser.findOne({ where: { email: email } });
@@ -110,13 +112,21 @@ router.post("/register", async (req, res) => {
         const hashedPassword = await hashPassword(password, email);
         //console.log("Double hashed password:" + hashedPassword);
 
+
+        //generate verificationCode
+        const verificationCode = generateVerificationCode();
+
         // Create authentication record
         await authentication.create({
             auth_user_id: newUser.id,
             createdAt: new Date(),
             updatedAt: new Date(),
             password: hashedPassword,
+            verifyCode:verificationCode
         });
+
+        // Send verification email with random string
+        sendVerificationCodeEmail(email,verificationCode);
 
         console.log(" User has been registerd successfully");
         res.status(201).json({ message: "User registered successfully" });
@@ -303,5 +313,130 @@ router.post("/validate-reset-token", async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 });
+
+// POST endpoint to verify the code
+router.post("/verify-code", async (req, res) => {
+  const {  code } = req.body;
+
+  try {
+    // Find the user by email
+    const user_record = await authentication.findOne({ where: { verifyCode : code } });
+
+    if (!user_record) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const auth_user = await appUser.findOne({ where: { id : user_record.auth_user_id } })
+
+    // Mark the verification code as used or delete it
+    // Update the password in the database
+    await authentication.update(
+      {
+        verifyCode: null,
+      },
+      { where: { id: user_record.id } }
+    );
+
+    // Generate JWT token
+    const token = await generateToken(auth_user);
+
+    // Send back the response with token and user object
+    res.status(200).json({
+      message: "Code verified successfully",
+      token,
+    });
+
+  } catch (error) {
+    console.error("Error verifying code:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+router.post("/get-profile", async (req, res) => {
+  const { token } = req.body;
+  console.log(token)
+
+  try {
+    // Verify the token to ensure the user is authenticated
+    const decodedToken = await verifyToken(token); // Add your JWT token verification logic here
+
+    if (!decodedToken) {
+      return res.status(401).json({ message: "Invalid or expired token" });
+    }
+
+    // Find the user associated with the token
+    const user = await appUser.findByPk(decodedToken.user.id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Find the user authentication record
+    const auth = await authentication.findOne({
+      where: { auth_user_id: user.id },
+    });
+    if (!auth) {
+      return res.status(404).json({ message: "Authentication record not found" });
+    }
+
+    const userType = await userRole.findOne({
+      where: { id: user.userType },
+    });
+
+    // Construct the profile data to return
+    const profile = {
+      id: user.id,
+      email: user.email,
+      blocked: auth.blocked,
+      failedAttempts: auth.failedAttempts,
+      userType:userType.name,
+      name:user.firstName+' '+user.lastName,
+      phoneNumber:user.phoneNumber
+      // Add any other relevant fields here
+    };
+
+    res.status(200).json(profile);
+  } catch (error) {
+    console.error("Error fetching profile:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+router.post("/update-profile", async (req, res) => {
+  const { token, phoneNumber, streetAddress, city, postalCode } = req.body;
+
+  try {
+
+    // Verify the token to ensure the user is authenticated
+    const decodedToken = await verifyToken(token); // Add your JWT token verification logic here
+
+    if (!decodedToken) {
+      return res.status(401).json({ message: "Invalid or expired token" });
+    }
+
+    // Find the user associated with this token
+    const user = await appUser.findByPk(decodedToken.user.id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Update the user profile details
+    await appUser.update(
+      {
+        phoneNumber: phoneNumber,
+        streetAddress: streetAddress,
+        city: city,
+        postalCode: postalCode,
+      },
+      { where: { id: user.id } }
+    );
+
+    res.status(200).json({ message: "Profile updated successfully" });
+  } catch (error) {
+    console.error("Error updating profile:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+
 
 module.exports = router;

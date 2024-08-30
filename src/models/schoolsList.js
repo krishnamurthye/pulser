@@ -20,9 +20,6 @@ module.exports = function(sequelize, DataTypes) {
       timestamps: false,
     });
 
-  // schoolsList.associate = (models) => {
-  //   schoolsList.belongsTo(models.schoolSystem, { foreignKey: 'schoolSystem', as: 'system' });
-  // };
 
     return schoolsList;
 };

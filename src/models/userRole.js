@@ -1,6 +1,6 @@
 
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('user_role', {
+  return sequelize.define('userRole', {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,

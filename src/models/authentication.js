@@ -21,6 +21,10 @@ module.exports = (sequelize, type) => {
         type: type.STRING,
         allowNull: false
       },
+      verifyCode: {
+        type: type.STRING,
+        allowNull: true
+      },
       failedAttempts: {
         type: type.INTEGER,
         defaultValue: 0

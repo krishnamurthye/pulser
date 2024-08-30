@@ -38,6 +38,50 @@ const sendPasswordResetEmail = async (recipientEmail, resetToken) => {
   }
 };
 
+/**
+ * Send an email with a verification code
+ * @param {string} recipientEmail - Email of the recipient
+ * @param {string} verificationCode - The verification code to be sent
+ */
+const sendVerificationCodeEmail = async (recipientEmail, verificationCode) => {
+  const mailOptions = {
+    from: process.env.EMAIL_USER,
+    to: recipientEmail,
+    subject: 'Your Verification Code',
+    html: `
+      <h3>Email Verification</h3>
+      <p>Your verification code is:</p>
+      <h2>${verificationCode}</h2>
+      <p>Please enter this code on the website to verify your email address.</p>
+    `
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+    console.log(`Verification code email sent to ${recipientEmail}`);
+  } catch (error) {
+    console.error('Error sending verification code email:', error);
+    throw new Error('Failed to send verification code email.');
+  }
+};
+
+/**
+ * Generate a random verification code
+ * @param {number} length - Length of the verification code
+ * @returns {string} - The generated verification code
+ */
+const generateVerificationCode = (length = 6) => {
+  const characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  let verificationCode = '';
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    verificationCode += characters[randomIndex];
+  }
+  return verificationCode;
+};
+
 module.exports = {
-  sendPasswordResetEmail
+  sendPasswordResetEmail,
+  sendVerificationCodeEmail,
+  generateVerificationCode
 };

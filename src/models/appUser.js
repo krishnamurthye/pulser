@@ -26,6 +26,9 @@ module.exports = function (sequelize, DataTypes) {
     ethnicity: DataTypes.STRING,
     specialization: DataTypes.STRING,
     gender: DataTypes.STRING,
+    streetAddress: DataTypes.STRING,
+    city: DataTypes.STRING,
+    postalCode: DataTypes.STRING,
     cv: DataTypes.BLOB("long"),
   }, {
     tableName: 'app_user',
