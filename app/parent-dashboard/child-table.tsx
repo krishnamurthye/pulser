@@ -101,14 +101,14 @@ const ChildTable = memo(({ child }: any) => {
           {sortedChildren().map((child) => (
             <tr key={child.id} onClick={handleRowClick}>
               <td className="border border-gray-400 px-4 py-2">
-                {child?.lsaRequests[0]?.school}
+                {child.schooling[0]?.schoolId.name}
               </td>
 
               <td className="border border-gray-400 px-4 py-2">
-                {child?.schooling[0]?.grade}
+                {child.schooling[0]?.grade.name}
               </td>
               <td className="border border-gray-400 px-4 py-2">
-                {child?.lsaRequests[0]?.needs}
+                {child.schooling[0]?.needLevel.name}
               </td>
               <td className="border border-gray-400 px-4 py-2">
                 {getFormattedDate(child?.lsaRequests[0]?.start_date)}

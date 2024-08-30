@@ -97,14 +97,14 @@ const Children = ({ gradeList, needLevelList, schoolsList }: any) => {
               <p className="text-gray-600">{getFormattedDate(child.dob)}</p>
 
               <p className="font-semibold text-gray-700">Grade:</p>
-              <p className="text-gray-600">{child?.schooling[0]?.grade}</p>
+              <p className="text-gray-600">{child?.schooling[0]?.grade.name}</p>
 
               <p className="font-semibold text-gray-700">Level:</p>
-              <p className="text-gray-600">{child?.schooling[0]?.needLevel}</p>
+              <p className="text-gray-600">{child?.schooling[0]?.needLevel.name}</p>
 
               <p className="font-semibold text-gray-700">Status:</p>
-              <p className="text-gray-600">
-                {child.schooling[0]?.status ? "Active" : "Inactive"}
+              <p className="text-gray-600" style={{color: child.isActive ? 'green' : 'red'}}>
+                {child.isActive ? "Active" : "In-Active"}
               </p>
             </div>
           </div>
