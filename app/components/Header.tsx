@@ -1,11 +1,21 @@
 "use client";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useAuth } from "../utils/AuthContext";
 import { ToastContainer } from "react-toastify";
+import { useEffect, useState } from "react";
 
 const Header: React.FC = () => {
-  const router = useRouter();
+  const pathname = usePathname();
   const { isLoggedIn, logout } = useAuth();
+  const [hideLinks, setHideLinks] = useState<boolean>(false);
+
+useEffect(() => {
+  // List of URLs where links should be hidden
+  const urlsToHideLinks = ["/verifycode", "/reset-password", "/profile-schema"];
+
+  // Determine if the links should be hidden based on the pathname
+  setHideLinks(urlsToHideLinks.includes(pathname));
+}, [pathname]);
 
   const handleLogout = () => {
     router.push("/login");
@@ -22,7 +32,7 @@ const Header: React.FC = () => {
             </a>
           </div>
           <div className="flex items-center">
-            {!isLoggedIn && (
+            {!hideLinks && !isLoggedIn && (
               <a
                 href="/registration"
                 className="text-white hover:text-white-600 px-3 py-2 rounded-md text-sm font-medium"
@@ -31,7 +41,7 @@ const Header: React.FC = () => {
               </a>
             )}
 
-            {!isLoggedIn ? (
+            {!hideLinks && !isLoggedIn ? (
               <a
                 href="/login"
                 className="text-white hover:text-white-600 px-3 py-2 rounded-md text-sm font-medium"
@@ -39,12 +49,14 @@ const Header: React.FC = () => {
                 Login
               </a>
             ) : (
-              <button
-                onClick={handleLogout}
-                className="text-white hover:text-white-600 px-3 py-2 rounded-md text-sm font-medium"
-              >
-                Logout
-              </button>
+              isLoggedIn && (
+                <button
+                  onClick={handleLogout}
+                  className="text-white hover:text-white-600 px-3 py-2 rounded-md text-sm font-medium"
+                >
+                  Logout
+                </button>
+              )
             )}
           </div>
         </div>

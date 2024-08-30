@@ -21,6 +21,10 @@ const RegistrationSchema = Yup.object().shape({
     .required("Confirm Password is required")
     .oneOf([Yup.ref("password")], "Passwords must match"),
   userType: Yup.string().required("Please select a role"),
+  firstName: Yup.string()
+    .required("FirstName is required"),
+  lastName: Yup.string()
+    .required("LastName is required")
   // nationality: Yup.number().required("Please enter nationality"),
 });
 
@@ -34,45 +38,47 @@ const Registration = () => {
   const router = useRouter();
 
   const handleSubmit = async (values: any, actions: any) => {
-    try {
-      const response = await fetch(buildUrl(authRoute, "register"), {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: values.email,
-          password: values.password,
-          phoneNumber: values.phoneNumber,
-          role: getUserRole(values.userType),
-          userType: values.userType?.toLowerCase(),
-        }),
-      });
+  try {
+    const response = await fetch(buildUrl(authRoute, "register"), {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+       body: JSON.stringify({
+        email: values.email,
+        password: values.password,
+        phoneNumber: values.phoneNumber,
+        firstName: values.firstName,
+        lastName: values.lastName,   
+        role: getUserRole(values.userType),
+        userType: values.userType?.toLowerCase(),
+      }),
+    });
 
-      if (!response.ok) {
-        throw new Error("Failed to register");
-      }
+    if (!response.ok) {
+      throw new Error("Failed to register");
+    }
 
-      const data = await response.json();
+    const data = await response.json();
 
-      toast.success(
-        "Registration successful. Please login to your account now!",
-        {
-          position: "top-right",
-          className: "custom-toast",
-        }
-      );
-      router.push("/login");
-    } catch (error) {
-      console.error("Registration error:", error);
-      toast.error("Sorry. Can't register!", {
+    toast.success(
+      "Registration successful. Please check your email for a verification code!",
+      {
         position: "top-right",
         className: "custom-toast",
-      });
-    } finally {
-      actions.setSubmitting(false);
-    }
-  };
+      }
+    );
+    router.push("/verifycode");
+  } catch (error) {
+    console.error("Registration error:", error);
+    toast.error("Sorry. Can't register!", {
+      position: "top-right",
+      className: "custom-toast",
+    });
+  } finally {
+    actions.setSubmitting(false);
+  }
+};
 
   return (
     <div className="min-h-screen flex justify-center items-center">
@@ -80,6 +86,8 @@ const Registration = () => {
         initialValues={{
           email: "",
           password: "",
+          firstName: "",
+          lastName: "",
           confirmPassword: "",
           phoneNumber: "",
           userType: "Parent",
@@ -116,6 +124,38 @@ const Registration = () => {
               </div>
               <ErrorMessage
                 name="userType"
+                component="div"
+                className="text-red-600"
+              />
+            </div>
+            <div className="mb-4">
+              <label htmlFor="firstName" className="block mb-2">
+                FirstName
+              </label>
+              <Field
+                type="text"
+                name="firstName"
+                id="firstName"
+                className="w-full px-3 py-2 border rounded-md"
+              />
+              <ErrorMessage
+                name="firstName"
+                component="div"
+                className="text-red-600"
+              />
+            </div>
+            <div className="mb-4">
+              <label htmlFor="lastName" className="block mb-2">
+                LastName
+              </label>
+              <Field
+                type="text"
+                name="lastName"
+                id="lastName"
+                className="w-full px-3 py-2 border rounded-md"
+              />
+              <ErrorMessage
+                name="lastName"
                 component="div"
                 className="text-red-600"
               />
