@@ -1,6 +1,6 @@
 
 module.exports = function(sequelize, DataTypes) {
-  const needLevel= sequelize.define('need_level', {
+  const needLevel= sequelize.define('needLevel', {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,

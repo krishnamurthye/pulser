@@ -36,7 +36,7 @@ module.exports = function(sequelize, DataTypes) {
         onDelete: 'NO ACTION',
       },
       status: DataTypes.INTEGER,
-      created_at: DataTypes.DATE,
+      //created_at: DataTypes.DATE,
       needLevel: DataTypes.INTEGER,
       additionalDetails: DataTypes.STRING
     },{
