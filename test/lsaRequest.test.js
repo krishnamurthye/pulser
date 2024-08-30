@@ -2,8 +2,7 @@ const request = require("supertest");
 const { app } = require("../src/app");
 const { sequelize, lsaRequest } = require("../src/models");
 const { appUser } = require("../src/models");
-const jwt = require("jsonwebtoken");
-const generateToken = require("../src/middleware/tokenGenerator");
+const { generateToken } = require('../src/middleware/tokenGenerator');
 
 describe("LSA Request API", () => {
   let token;

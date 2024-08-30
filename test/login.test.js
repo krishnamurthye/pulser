@@ -4,7 +4,8 @@ const { app, server, isServerReady } = require('../src/app');
 const { hashPassword, comparePassword } = require('../src/util/passwordUtil');
 // const { sendPasswordResetEmail } = require('../src/util/emailUtil');
 const { appUser } = require("../src/models");
-const generateToken = require("../src/middleware/tokenGenerator");
+const { generateToken } = require('../src/middleware/tokenGenerator');
+
 
 // Mocking the email utility
 jest.mock('../src/util/emailUtil', () => ({
@@ -130,7 +131,7 @@ const lasRole=2;
     // Assume token is generated during password reset request and sent to email
 
     const u = await appUser.create({
-      id: 1,
+      id: 10,
       email: "test@example.com",
       password: "password123",
       userType: 1,
@@ -161,8 +162,8 @@ const lasRole=2;
 
   it('should not reset password with invalid token', async () => {
     const u = await appUser.create({
-      id: 1,
-      email: "test@example.com",
+      id: 11,
+      email: "test11@example.com",
       password: "password123",
       userType: 1,
     });

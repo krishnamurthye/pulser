@@ -1,3 +1,4 @@
+//models/index.js
 const Sequelize = require("sequelize");
 const userRoleModel = require("./userRole");
 const appUserModel = require("./appUser");
@@ -22,7 +23,8 @@ const sequelize = new Sequelize({
   username: "root",
   password: "password",
   host: "localhost",
-  quoteIdentifiers: true
+  quoteIdentifiers: true,
+  logging: console.log 
 });
 
 // const address = addressModel(sequelize, Sequelize);
@@ -44,7 +46,7 @@ const grades = gradesModel(sequelize, Sequelize);
 
 appUser.hasOne(authentication, { foreignKey: "auth_user_id" });
 authentication.belongsTo(appUser, { foreignKey: "auth_user_id" });
-lsaRequest.hasOne(appUser, { foreignKey: "child" });
+//lsaRequest.hasOne(appUser, { foreignKey: "child" });
 appUser.hasMany(workExperienceSQLModel, {
   foreignKey: "appUserId",
   as: "workExperiences",
@@ -78,7 +80,7 @@ const models = {
 };
 
 Object.keys(models).forEach((modelName) => {
-  if ("associate" in models[modelName]) {
+  if (models[modelName].associate) {
     models[modelName].associate(models);
   }
 });

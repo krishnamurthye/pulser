@@ -7,11 +7,12 @@ module.exports = (sequelize, DataTypes) => {
       },
       child: {
         type: DataTypes.INTEGER,
-        allowNull: false,
-        // references: {
-        //   model: 'appUser',
-        //   key: 'id'
-        // }
+                references: {
+                model: 'app_user',
+                  key: 'id'
+                },
+                onUpdate: 'NO ACTION',
+                onDelete: 'NO ACTION',
       },
       age: DataTypes.INTEGER,
       grade: DataTypes.INTEGER,
@@ -27,9 +28,9 @@ module.exports = (sequelize, DataTypes) => {
       timestamps: true,
     });
   
-    lsaRequest.associate = (models) => {
-      lsaRequest.belongsTo(models.appUser, { foreignKey: 'child', as: 'childDetails' });
-  };
+//    lsaRequest.associate = (models) => {
+//      lsaRequest.belongsTo(models.appUser, { foreignKey: 'child', as: 'childDetails' });
+//  };
 
     return lsaRequest;
   };

@@ -18,6 +18,7 @@ try{
   schoolsLists = JSON.parse(fs.readFileSync(filePath, "utf-8"));
 
   for (const school of schoolsLists) {
+    console.log(school)
     await schoolsList.findOrCreate({
       where: { id: school.id },
       defaults: {
@@ -31,7 +32,7 @@ try{
   console.log("Schools list have been loaded and cached.");
   } catch (error) {
         console.error("Error loading Schools List:", error);
-      }
+  }
 }
 
 function getSchoolLists() {
@@ -55,6 +56,7 @@ try{
   const filePath = path.join(__dirname, "../../config/school-system.json");
   schoolSystemLists = JSON.parse(fs.readFileSync(filePath, "utf-8"));
   for (const ss of schoolSystemLists) {
+    console.log(ss)
     await schoolSystem.findOrCreate({
       where: { id: ss.id },
       defaults: {

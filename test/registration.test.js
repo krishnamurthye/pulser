@@ -1,9 +1,7 @@
 const request = require('supertest');
-// const app = require('../src/app');
-const bcrypt = require('bcryptjs');
-const { app, server, isServerReady } = require('../src/app');
+const { app} = require('../src/app');
 const { appUser, authentication, sequelize } = require('../src/models');
-const { hashPassword, comparePassword } = require('../src/util/passwordUtil');
+const { comparePassword } = require('../src/util/passwordUtil');
 
 const parentType = "parent";
 const lasType = "lsa";

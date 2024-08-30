@@ -1,3 +1,5 @@
+//..models/schoolSystem.js
+
 module.exports = function(sequelize, DataTypes) {
     const schoolSystem = sequelize.define('schoolSystem', {
       id: {

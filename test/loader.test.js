@@ -1,10 +1,12 @@
-// test/profile.test.js
+// test/loader.test.js
 
 const request = require('supertest');
 const { app, server } = require('../src/app');
 const { appUser } = require('../src/models');
-const jwt = require('jsonwebtoken');
-const generateToken = require('../src/middleware/tokenGenerator');
+const { generateToken } = require('../src/middleware/tokenGenerator');
+
+console.log("****************************** generateToken ******************************* ")
+console.log(generateToken)
 
 describe('School List', () => {
   let token;
