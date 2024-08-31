@@ -65,23 +65,8 @@ const sendVerificationCodeEmail = async (recipientEmail, verificationCode) => {
   }
 };
 
-/**
- * Generate a random verification code
- * @param {number} length - Length of the verification code
- * @returns {string} - The generated verification code
- */
-const generateVerificationCode = (length = 6) => {
-  const characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  let verificationCode = '';
-  for (let i = 0; i < length; i++) {
-    const randomIndex = Math.floor(Math.random() * characters.length);
-    verificationCode += characters[randomIndex];
-  }
-  return verificationCode;
-};
 
 module.exports = {
   sendPasswordResetEmail,
-  sendVerificationCodeEmail,
-  generateVerificationCode
+  sendVerificationCodeEmail
 };

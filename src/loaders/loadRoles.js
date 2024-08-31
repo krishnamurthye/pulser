@@ -37,6 +37,6 @@ async function loadUserRoles() {
  function getUserRoles() {
    loadUserRoles();
   return userRoles;
-}
+} 
 
 module.exports = { loadUserRoles, getUserRoles };

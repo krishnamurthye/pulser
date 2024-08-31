@@ -2,20 +2,18 @@
 
 const express = require("express");
 const { appUser, authentication, sequelize,userRole } = require("../models");
-const { loadUserRoles, getUserRoles } = require("../loaders/loadRoles");
-const { hashPassword, comparePassword } = require("../util/passwordUtil");
+const { hashPassword, comparePassword, generateVerificationCode } = require("../util/passwordUtil");
 const { generateToken, verifyToken } = require("../middleware/tokenGenerator");
-const { sendPasswordResetEmail, sendVerificationCodeEmail, generateVerificationCode } = require("../util/emailUtil"); // Import a utility function for sending emails (if applicable
+const { sendPasswordResetEmail, sendVerificationCodeEmail } = require("../util/emailUtil"); // Import a utility function for sending emails (if applicable
 const {
-    getUserTypes,
     getUserTypeById,
-    loadUserTypes,
     getUserTypeByName,
 } = require("../util/loadUserTypes");
 const {
     DISALLOWED_USER_TYPES_BY_NAMES,
     DISALLOWED_ROLES_BY_NAMES,
 } = require("../../config/constants");
+const { getRoleByName } = require("../util/roleEnum");
 
 const router = express.Router();
 
@@ -67,20 +65,19 @@ router.post("/register", async (req, res) => {
             console.error("userType parsing issue", error);
             return res.status(500).json({ error: "Invalid request 003" });
         }
-
-        try {
-            const roles = getUserRoles();
-            console.log(" *** roles ** ", roles);
-            if (roles.length === 0) {
-                // Call the load method
-                console.log("reloading the user roles");
-                await loadUserRoles();
-            }
-            const roleId = parseInt(role); // Convert role to an integer
-            const validRole = roles.find((r) => r.id === roleId);
-
-            if (!validRole || DISALLOWED_ROLES_BY_NAMES.includes(validRole.name)) {
-                console.error("role does not exists", role, validRole);
+       
+       
+        let validRole = getRoleByName(userTypeFromConfig.name);
+            if (validRole == null) {
+              console.error(
+                  "role  does not exists for:",
+                  userTypeId,
+                  userTypeFromConfig
+              );
+              return res.status(500).json({ error: "Invalid request 0077" });
+          }
+            if ( DISALLOWED_ROLES_BY_NAMES.includes(validRole.name)) {
+                console.error("role does not exists", validRole);
                 return res.status(500).json({ error: "Invalid request 004" });
             }
 
@@ -92,17 +89,14 @@ router.post("/register", async (req, res) => {
                 );
                 return res.status(500).json({ error: "Invalid request 005" });
             }
-        } catch (error) {
-            console.error("role parsing issue", error);
-            return res.status(500).json({ error: "Invalid request 0055" });
-        }
-
+        
+        let roleId = validRole.id;
         // Create a new user
         const newUser = await appUser.create({
             firstName,
             lastName,
             email,
-            role,
+            role:roleId,
             phoneNumber,
             userType: userTypeId,
         });
@@ -114,7 +108,7 @@ router.post("/register", async (req, res) => {
 
 
         //generate verificationCode
-        const verificationCode = generateVerificationCode();
+        const verificationCode = generateVerificationCode(6);
 
         // Create authentication record
         await authentication.create({

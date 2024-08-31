@@ -57,33 +57,33 @@ const server = app.listen(PORT, async () => {
       loadUserTypes();  // Load user types into memory
       console.log('User types loaded');
 
-      console.log('load user roles');
-      await loadUserRoles();
+      // console.log('load user roles');
+      // await loadUserRoles();
 
-      loadSchoolsSystem();
+      await loadSchoolsSystem();
       console.log('loaded SchoolsSystem');
 
-      loadSchoolsList();
+      await loadSchoolsList();
       console.log('loaded SchoolsList');
 
       console.log('Loading Education');
-      loadEducation();  // Load into memory
+      await loadEducation();  // Load into memory
       console.log('Education loaded');
 
       console.log('Loading Specialization');
-      loadSpecialization();  // Load into memory
+      await loadSpecialization();  // Load into memory
       console.log('Specialization loaded');
 
       console.log('Loading Specialization');
-      loadSpecialization();  // Load into memory
+      await loadSpecialization();  // Load into memory
       console.log('Specialization loaded');
 
       console.log('Loading NeedLevels');
-      loadNeedLevels();  // Load into memory
+      await loadNeedLevels();  // Load into memory
       console.log('NeedLevels loaded');
 
       console.log('Loading Grades');
-      loadGrades()
+      await loadGrades()
       console.log('Grades loaded');
 
       console.log('loaded');
