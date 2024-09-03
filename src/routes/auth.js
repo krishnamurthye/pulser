@@ -372,17 +372,15 @@ router.post("/get-profile", async (req, res) => {
       return res.status(404).json({ message: "Authentication record not found" });
     }
 
-    const userType = await userRole.findOne({
-      where: { id: user.userType },
-    });
-
+    const userTypeName = getUserTypeById(user.userType)
+    
     // Construct the profile data to return
     const profile = {
       id: user.id,
       email: user.email,
       blocked: auth.blocked,
       failedAttempts: auth.failedAttempts,
-      userType:user.userType,
+      userType:userTypeName.name,
       name:user.firstName+' '+user.lastName,
       phoneNumber:user.phoneNumber
       // Add any other relevant fields here
