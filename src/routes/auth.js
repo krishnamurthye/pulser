@@ -382,7 +382,7 @@ router.post("/get-profile", async (req, res) => {
       email: user.email,
       blocked: auth.blocked,
       failedAttempts: auth.failedAttempts,
-      userType:userType.name,
+      userType:user.userType,
       name:user.firstName+' '+user.lastName,
       phoneNumber:user.phoneNumber
       // Add any other relevant fields here
