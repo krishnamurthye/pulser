@@ -109,7 +109,7 @@ router.post("/register", async (req, res) => {
 
         //generate verificationCode
         const verificationCode = generateVerificationCode(6);
-
+        console.log(" verificationCode",verificationCode);
         // Create authentication record
         await authentication.create({
             auth_user_id: newUser.id,
