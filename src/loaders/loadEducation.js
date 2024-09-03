@@ -7,6 +7,13 @@ let isLoaded = false;
 
 async function loadEducation() {
     try {
+
+        if (isLoaded) {
+            console.log("Education already loaded.");
+            return;
+          }
+
+
         const filePath = path.join(__dirname, '../../config/education.json');
         const educationList = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
 

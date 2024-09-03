@@ -9,7 +9,7 @@ let isLoaded = false;
  async function loadGrades() {
   try {
     // Prevent reloading if already loaded
-    if (this.isLoaded) {
+    if (isLoaded) {
       console.log("gradesList already loaded.");
       return;
     }
@@ -30,7 +30,7 @@ let isLoaded = false;
     }
 
     // Cache the levels locally
-    this.isLoaded = true;
+    isLoaded = true;
     console.log("gradesList have been loaded and cached.");
   } catch (error) {
     console.error("Error loading grades:", error);

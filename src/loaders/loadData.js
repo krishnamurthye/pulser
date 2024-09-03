@@ -9,7 +9,7 @@ let isSchoolsListLoaded = false;
 
 async function loadSchoolsList() {
 try{
-  if (this.isSchoolsListLoaded) {
+  if (isSchoolsListLoaded) {
     console.log("Schools List already loaded.");
     return;
   }
@@ -48,7 +48,7 @@ let isSystemListLoaded = false;
 
 async function loadSchoolsSystem() {
 try{
-  if (this.isSystemListLoaded) {
+  if (isSystemListLoaded) {
     console.log(" Schools System already loaded.");
     return;
   }

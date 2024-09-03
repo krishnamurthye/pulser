@@ -56,7 +56,7 @@ exports.getNeedLevelList = async (req, res) => {
 };
 
 
-exports.getGardes = async (req, res) => {
+exports.getGardesList = async (req, res) => {
   try {
     
     const gradesLists = await getGrades();
