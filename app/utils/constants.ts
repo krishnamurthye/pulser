@@ -15,7 +15,8 @@ export const USER_TYPES = [
 
 export const ROLES = [
   { id: 1, name: "parent" },
-  { id: 2, name: "lsa" },
-  { id: 3, name: "admin" },
-  { id: 4, name: "councillor" },
+  { id: 3, name: "child" },
+  { id: 3, name: "lsa" },
+  { id: 4, name: "admin" },
+  { id: 5, name: "councillor" },
 ];
