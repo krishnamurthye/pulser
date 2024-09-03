@@ -46,7 +46,7 @@ const grades = gradesModel(sequelize, Sequelize);
 
 appUser.hasOne(authentication, { foreignKey: "auth_user_id" });
 authentication.belongsTo(appUser, { foreignKey: "auth_user_id" });
-lsaRequest.hasOne(appUser, { foreignKey: "child" });
+// lsaRequest.hasOne(appUser, { foreignKey: "child" });
 appUser.hasMany(workExperienceSQLModel, {
   foreignKey: "appUserId",
   as: "workExperiences",
